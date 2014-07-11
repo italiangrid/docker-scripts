@@ -1,0 +1,26 @@
+mod "CNAF/puppet-emi3-release",
+       :git => "https://github.com/cnaf/puppet-emi3-release"
+
+mod "CNAF/puppet-infn-ca",
+       :git => "https://github.com/cnaf/puppet-infn-ca"
+
+mod "CNAF/puppet-egi-trust-anchors",
+       :git => "https://github.com/cnaf/puppet-egi-trust-anchors"
+
+mod "CNAF/puppet-test-ca",
+       :git => "https://github.com/cnaf/puppet-test-ca"
+
+mod "CNAF/puppet-robot-framework",
+       :git => "https://github.com/cnaf/puppet-robot-framework"
+
+mod "CNAF/puppet-voms-repos",
+       :git => "https://github.com/cnaf/puppet-voms-repos"
+
+mod "CNAF/puppet-python",
+       :git => "https://github.com/cnaf/puppet-python"
+
+mod "CNAF/puppet-voms",
+       :git => "https://github.com/dandreotti/puppet-voms"
+
+mod "CNAF/puppet-test-vos",
+       :git => "https://github.com/cnaf/puppet-test-vos"
