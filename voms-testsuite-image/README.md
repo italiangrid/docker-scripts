@@ -1,16 +1,28 @@
-voms-testsuite-image
+VOMS testsuite image
 ==============
 
 
 A docker image based on Centos for testing VOMS clients.
 
 
-# Build the voms-restsuite image
+## Build the voms-testsuite image
 
-    docker pull centos:6.4
-    docker build --no-cache -t centos-6.4/voms-ts:1.0 .
+First build the centos6/puppetbase:1.0 image as explained in puppet-baseimage/README.md.
 
-# Running the VOMS testsuite 
+Then run: 
 
-    docker run -v /etc/localtime:/etc/localtime:ro --name voms-ts centos-6.4/voms-ts:1.0 sh -c "pybot --variable vo1_host:vgrid02.cnaf.infn.it --variable vo1:test.vo --variable vo1_issuer:/C=IT/O=INFN/OU=Host/L=CNAF/CN=vgrid02.cnaf.infn.it --pythonpath lib -d reports tests/clients"
+    docker build --no-cache -t centos6/voms-ts:1.0 .
+
+Changes to added scripts (*setup_clients.sh* and *get_puppet_modules.sh*) require a re-build of the image.
+
+## Running the VOMS testsuite 
+
+Input parameters are the repo of the desired version of VOMS clients to install and the git repo from where cloning the VOMS testsuite.
+
+ **Time on the host where container will run must be synchronized with time on servers used for testing.**
+
+    docker run -v /tmp -v /etc/localtime:/etc/localtime:ro --name voms-ts -e "VOMSREPO=http://radiohead.cnaf.infn.it:9999/view/REPOS/job/repo_voms_develop_SL6/lastSuccessfulBuild/artifact/voms-develop_sl6.repo" -e "TESTSUITE=git://github.com/italiangrid/voms-testsuite.git" -t centos6/voms-ts:1.0
+
+In this example a volume is created for the container in /tmp. Tests results will be available under /var/lib/docker/vfs/ directory on local host.
+
 
