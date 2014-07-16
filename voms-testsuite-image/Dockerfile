@@ -8,8 +8,8 @@ run ./get_puppet_modules.sh
 add manifest.pp /
 run puppet apply --modulepath=/modules:/etc/puppet/modules/ /manifest.pp
 
-# install test-ca, fetch-crl and dcache clients
-run yum install -y igi-test-ca igi-test-ca-256 ca_INFN-CA-2006 fetch-crl dcache-srmclient
+# install fetch-crl and dcache clients
+run yum install -y fetch-crl dcache-srmclient
 
 # run fetch-crl
 run fetch-crl
