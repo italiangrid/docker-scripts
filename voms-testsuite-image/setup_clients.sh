@@ -1,4 +1,10 @@
 #!/bin/bash
+set -x
+
+VO_HOST="${VO_HOST:-vgrid02.cnaf.infn.it}"
+VO="${VO:-test.vo}"
+VO_ISSUER="${VO_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=vgrid02.cnaf.infn.it}"
+TESTSUITE="${TESTSUITE:-git://github.com/italiangrid/voms-testsuite.git}"
 
 # check and install the extra repo for VOMS clients if provided by user
 if [ -z $VOMSREPO ]; then
@@ -15,4 +21,5 @@ yum install -y myproxy
 
 
 # install and execute the VOMS testsuite as user "voms"
-sudo -u voms -- sh -c "git clone $TESTSUITE; cd /home/voms/voms-testsuite; pybot --variable vo1_host:vgrid02.cnaf.infn.it --variable vo1:test.vo --variable vo1_issuer:/C=IT/O=INFN/OU=Host/L=CNAF/CN=vgrid02.cnaf.infn.it --pythonpath lib -d /tmp/reports tests/clients"
+sudo -u voms -- sh -c "git clone $TESTSUITE; cd /home/voms/voms-testsuite; pybot --variable vo1_host:$VO_HOST --variable vo1:$VO --variable vo1_issuer:$VO_ISSUER --pythonpath lib -d reports tests/clients"
+
