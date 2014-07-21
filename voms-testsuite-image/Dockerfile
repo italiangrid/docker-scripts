@@ -24,5 +24,5 @@ workdir /home/voms
 # install clients setup script
 add setup_clients.sh /
 run chmod +x /setup_clients.sh
-cmd /setup_clients.sh
+entrypoint /setup_clients.sh
 

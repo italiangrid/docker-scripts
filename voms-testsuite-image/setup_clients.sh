@@ -21,5 +21,5 @@ yum install -y myproxy
 
 
 # install and execute the VOMS testsuite as user "voms"
-sudo -u voms -- sh -c "git clone $TESTSUITE; cd /home/voms/voms-testsuite; pybot --variable vo1_host:$VO_HOST --variable vo1:$VO --variable vo1_issuer:$VO_ISSUER --pythonpath lib -d reports tests/clients"
+exec su - voms sh -c "git clone $TESTSUITE; cd /home/voms/voms-testsuite; pybot --variable vo1_host:$VO_HOST --variable vo1:$VO --variable vo1_issuer:$VO_ISSUER --pythonpath lib -d reports tests/clients"
 
