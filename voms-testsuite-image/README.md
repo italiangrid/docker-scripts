@@ -21,5 +21,5 @@ Input parameters are the repo of the desired version of VOMS clients to install 
 
  **Time on the host where container will run must be synchronized with time on servers used for testing.**
 
-    docker run -v /etc/localtime:/etc/localtime:ro --name voms-ts -e "VOMSREPO=http://radiohead.cnaf.infn.it:9999/view/REPOS/job/repo_voms_develop_SL6/lastSuccessfulBuild/artifact/voms-develop_sl6.repo" -t centos6/voms-ts:1.0
+    docker run -v /etc/localtime:/etc/localtime:ro --name voms-ts -e "VOMSREPO=http://radiohead.cnaf.infn.it:9999/view/REPOS/job/repo_voms_develop_SL6/lastSuccessfulBuild/artifact/voms-develop_sl6.repo" centos6/voms-ts:1.0
 
