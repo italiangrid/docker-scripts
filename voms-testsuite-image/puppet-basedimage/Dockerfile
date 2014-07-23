@@ -1,7 +1,7 @@
 FROM    centos:centos6
 
 # install epel
-run rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+run rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 
 #update the image
 run yum update -y
