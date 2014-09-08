@@ -11,7 +11,7 @@ if [ -z $VOMSREPO ]; then
   echo "No clients repo provided. Installing default version (EMI3)"
 else
   wget "$VOMSREPO" -O /etc/yum.repos.d/vomsclients.repo
-  if [ $? !=0 ]; then
+  if [ $? != 0 ]; then
     echo "A problem occurred when downloading the provided repo. Installing default version (EMI3)"
   fi
 fi
