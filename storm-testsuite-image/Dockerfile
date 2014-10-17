@@ -21,8 +21,11 @@ run mkdir /home/tester/.globus
 user root
 workdir /home/tester
 
-# install clients setup script
-add setup_clients.sh /
-run chmod +x /setup_clients.sh
-entrypoint /setup_clients.sh
+# install clients
+run yum install -y voms-clients3
+run yum install -y myproxy
+
+add setup_testsuite.sh /
+run chmod +x /setup_testsuite.sh
+entrypoint /setup_testsuite.sh
 
