@@ -1,4 +1,4 @@
-FROM	centos6/puppetbase:1.0
+FROM centos6/baseimage:1.0
 
 #install the list of puppet modules after downloading from github
 add get_puppet_modules.sh /
@@ -19,10 +19,8 @@ expose 8443
 expose 8444
 expose 9998
 
-# turn syslog on
-run service rsyslog start
-
 # install clients setup script
 add deploy.sh /
 run chmod +x /deploy.sh
-entrypoint /deploy.sh
+#entrypoint /deploy.sh
+CMD ["/sbin/my_init"]

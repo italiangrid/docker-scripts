@@ -15,7 +15,7 @@ wget https://raw.githubusercontent.com/dandreotti/docker-scripts/master/test-cer
 chmod 400 /etc/grid-security/hostkey.pem
 chmod 644 /etc/grid-security/hostcert.pem
 
-#setup deployment
+# setup deployment
 source $SETUP_SCRIPT
 
 sed -i -e '/\/opt\/glite\/yaim\/bin\/yaim/i\echo "config_ntp () {"> /opt/glite/yaim/functions/local/config_ntp\necho "return 0">> /opt/glite/yaim/functions/local/config_ntp\necho "}">> /opt/glite/yaim/functions/local/config_ntp' $DEPLOYMENT_SCRIPT
@@ -24,10 +24,19 @@ sed -i -e '/yum install -y emi-storm-backend-mp/c\yum install -y --enablerepo=ce
 
 sh $DEPLOYMENT_SCRIPT
 
-#add links
+# add SAs links
 cd /storage/testers.eu-emi.eu/
 ln -s ../dteam dteam
 ln -s ../noauth noauth_sa
 
 cd /storage/noauth/
 ln -s ../testers.eu-emi.eu testers
+
+# stop StoRM services
+service storm-backend-server stop
+service storm-frontend-server stop
+service storm-gridhttps-server stop
+service storm-globus-gridftp stop
+
+# setup StoRM services in runit 
+
