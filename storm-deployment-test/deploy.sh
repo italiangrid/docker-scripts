@@ -1,10 +1,13 @@
 #!/bin/bash
 set -x
 
+MODE="${MODE:-clean}"
+PLATFORM="${PLATFORM:-SL6}"
+
 git clone git://github.com/dandreotti/docker-storm-deployment-test.git
 cd docker-storm-deployment-test
 
-DEPLOYMENT_SCRIPT="clean-deployment_SL6.sh"
+DEPLOYMENT_SCRIPT="$MODE-deployment_$PLATFORM.sh"
 
 # install host certificate
 wget https://raw.githubusercontent.com/dandreotti/docker-scripts/master/test-certificates/docker_storm_cnaf_infn_it.cert.pem -O /etc/grid-security/hostcert.pem
