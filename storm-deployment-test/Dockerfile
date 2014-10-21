@@ -1,4 +1,4 @@
-FROM centos6/baseimage:1.0
+FROM centos6/puppetbase:1.0
 
 #install the list of puppet modules after downloading from github
 run git clone git://github.com/cnaf/ci-puppet-modules.git /ci-puppet-modules
