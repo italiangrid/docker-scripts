@@ -21,6 +21,5 @@ export X509_USER_KEY=/etc/grid-security/storm/hostkey.pem
 mkdir -p /var/log/storm
 chown storm:storm /var/log/storm
 
-
-exec /sbin/setuser storm /usr/sbin/storm-frontend-server -d -c $CONFIGURATION_FILE >>/var/log/storm/storm-frontend-server.log 2>&1
+su -m -s "/bin/bash" -c "/usr/sbin/storm-frontend-server -d -c $CONFIGURATION_FILE >>/var/log/storm/storm-frontend-server.log 2>&1" storm
 
