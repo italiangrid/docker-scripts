@@ -1,12 +1,11 @@
 FROM	centos6/puppetbase:1.0
 
 #install the list of puppet modules after downloading from github
-add get_puppet_modules.sh /
-run ./get_puppet_modules.sh
+run git clone git://github.com/cnaf/ci-puppet-modules.git /ci-puppet-modules
 
 #install all puppet modules required by the StoRM testsuite
 add manifest.pp /
-run puppet apply --modulepath=/modules:/etc/puppet/modules/ /manifest.pp
+run puppet apply --modulepath=/ci-puppet-modules/modules:/etc/puppet/modules/ /manifest.pp
 
 # install fetch-crl
 run yum install -y fetch-crl
