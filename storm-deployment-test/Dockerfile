@@ -1,26 +1,26 @@
 FROM centos6/baseimage:1.0
 
 #install the list of puppet modules after downloading from github
-add get_puppet_modules.sh /
-run ./get_puppet_modules.sh
+run git clone git://github.com/cnaf/ci-puppet-modules.git /ci-puppet-modules
 
-#apply all puppet modules required
+#install all puppet modules required by the StoRM testsuite
 add manifest.pp /
-run puppet apply  manifest.pp
+run puppet apply --modulepath=/ci-puppet-modules/modules:/etc/puppet/modules/ /manifest.pp
 
+# install acl and extended attributes support
 run yum install -y attr
 run yum install -y acl
 
 # expose StoRM ports
-expose 8080
-expose 8085
-expose 8086 
-expose 8443
-expose 8444
-expose 9998
+expose 8080 8085 8086 8443 8444 9998
 
 # install clients setup script
 add deploy.sh /
 run chmod +x /deploy.sh
-#entrypoint /deploy.sh
-CMD ["/sbin/my_init"]
+
+# add StoRM daemons 
+add daemons /daemons
+run chmod -R +x /daemons
+
+entrypoint /deploy.sh
+

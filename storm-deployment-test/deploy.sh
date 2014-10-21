@@ -1,11 +1,8 @@
 #!/bin/bash
 set -x
 
-git clone git://github.com/dandreotti/storm-deployment-test.git
-cd storm-deployment-test
-git checkout fix/STOR-654
-
-SETUP_SCRIPT="setup-scripts/SL6/setup-emi3-devel-sl6.sh"
+git clone git://github.com/dandreotti/docker-storm-deployment-test.git
+cd docker-storm-deployment-test
 
 DEPLOYMENT_SCRIPT="clean-deployment_SL6.sh"
 
@@ -15,14 +12,13 @@ wget https://raw.githubusercontent.com/dandreotti/docker-scripts/master/test-cer
 chmod 400 /etc/grid-security/hostkey.pem
 chmod 644 /etc/grid-security/hostcert.pem
 
-# setup deployment
-source $SETUP_SCRIPT
-
-sed -i -e '/\/opt\/glite\/yaim\/bin\/yaim/i\echo "config_ntp () {"> /opt/glite/yaim/functions/local/config_ntp\necho "return 0">> /opt/glite/yaim/functions/local/config_ntp\necho "}">> /opt/glite/yaim/functions/local/config_ntp' $DEPLOYMENT_SCRIPT
-
-sed -i -e '/yum install -y emi-storm-backend-mp/c\yum install -y --enablerepo=centosplus emi-storm-backend-mp emi-storm-frontend-mp emi-storm-globus-gridftp-mp emi-storm-gridhttps-mp' $DEPLOYMENT_SCRIPT
+# setup StoRM services
+service rsyslog start
 
 sh $DEPLOYMENT_SCRIPT
+
+# configure with yaim
+/opt/glite/yaim/bin/yaim -c -s /etc/storm/siteinfo/storm.def -n se_storm_backend -n se_storm_frontend -n se_storm_gridftp -n se_storm_gridhttps
 
 # add SAs links
 cd /storage/testers.eu-emi.eu/
@@ -33,10 +29,9 @@ cd /storage/noauth/
 ln -s ../testers.eu-emi.eu testers
 
 # stop StoRM services
-service storm-backend-server stop
-service storm-frontend-server stop
-service storm-gridhttps-server stop
-service storm-globus-gridftp stop
+pkill -f storm-frontend-server
 
-# setup StoRM services in runit 
+# disable frontend monitor
+sed -i -e '/monitoring.enabled=true/c\monitoring.enabled=false' /etc/storm/frontend-server/storm-frontend-server.conf
 
+sh /daemons/frontend
