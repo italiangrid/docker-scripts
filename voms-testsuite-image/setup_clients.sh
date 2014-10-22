@@ -5,6 +5,7 @@ VO_HOST=${VO_HOST:-vgrid02.cnaf.infn.it}
 VO_PORT=${VO_PORT:-15000}
 VO=${VO:-test.vo}
 VO_ISSUER=${VO_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=vgrid02.cnaf.infn.it}
+VO_ISSUER_CA=${VO_ISSUER_CA:-/C=IT/O=INFN/CN=INFN CA}
 TESTSUITE=${TESTSUITE:-git://github.com/italiangrid/voms-testsuite.git}
 
 # check and install the extra repo for VOMS clients if provided by user
@@ -24,6 +25,13 @@ yum install -y myproxy
 rm -rf /etc/vomses/${VO}*
 cat << EOF > /etc/vomses/${VO}-${VO_HOST}
 "${VO}" "${VO_HOST}" "${VO_PORT}" "${VO_ISSUER}" "${VO}"
+EOF
+
+## Create LSC file for VO
+mkdir -p /etc/grid-security/vomsdir/${VO}
+CAT << EOF > /etc/grid-security/vomsdir/${VO}/${VO_HOST}.lsc
+${VO_ISSUER}
+${VO_ISSUER_CA}
 EOF
 
 cat << EOF > /home/voms/run-testsuite.sh
