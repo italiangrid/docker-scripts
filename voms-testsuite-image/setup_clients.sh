@@ -26,7 +26,7 @@ cat << EOF > /etc/vomses/${VO}-${VO_HOST}
 "${VO}" "${VO_HOST}" "${VO_PORT}" "${VO_ISSUER}" "${VO}"
 EOF
 
-cat << EOF > run-testsuite.sh
+cat << EOF > /home/voms/run-testsuite.sh
 #!/bin/bash 
 set -ex
 git clone $TESTSUITE
@@ -38,5 +38,8 @@ pybot --variable vo1_host:$VO_HOST \
   tests/clients
 EOF
 
+chmod +x /home/voms/run-testsuite.sh
+chown voms:voms /home/voms/run-testsuite.sh
+
 # install and execute the VOMS testsuite as user "voms"
-sudo -u voms sh run-testsuite.sh
+su - voms -c /home/voms/run-testsuite.sh
