@@ -27,12 +27,17 @@ cat << EOF > /etc/vomses/${VO}-${VO_HOST}
 "${VO}" "${VO_HOST}" "${VO_PORT}" "${VO_ISSUER}" "${VO}"
 EOF
 
+## Print out VOMSES file content
+cat /etc/vomses/${VO}-${VO_HOST}
+
+lsc_content=$(openssl s_client -connect ${VO_HOST}:${VO_PORT} | openssl x509 -noout -subject -issuer | sed -e 's/subject= //g' -e 's/issuer= //g')
+
 ## Create LSC file for VO
 mkdir -p /etc/grid-security/vomsdir/${VO}
-CAT << EOF > /etc/grid-security/vomsdir/${VO}/${VO_HOST}.lsc
-${VO_ISSUER}
-${VO_ISSUER_CA}
-EOF
+echo ${lsc_content} > /etc/grid-security/vomsdir/${VO}/${VO_HOST}.lsc
+
+## Print out lSC file content
+cat /etc/grid-security/vomsdir/${VO}/${VO_HOST}.lsc
 
 cat << EOF > /home/voms/run-testsuite.sh
 #!/bin/bash 
