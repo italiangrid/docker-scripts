@@ -39,4 +39,4 @@ pybot --variable vo1_host:$VO_HOST \
 EOF
 
 # install and execute the VOMS testsuite as user "voms"
-exec su - voms sh run-testsuite.sh
+sudo -u voms sh run-testsuite.sh
