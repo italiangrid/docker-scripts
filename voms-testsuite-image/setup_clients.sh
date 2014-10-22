@@ -30,11 +30,11 @@ EOF
 ## Print out VOMSES file content
 cat /etc/vomses/${VO}-${VO_HOST}
 
-lsc_content=$(openssl s_client -connect ${VO_HOST}:${VO_PORT} | openssl x509 -noout -subject -issuer | sed -e 's/subject= //g' -e 's/issuer= //g')
+make_lsc_cmd="openssl s_client -connect ${VO_HOST}:${VO_PORT} | openssl x509 -noout -subject -issuer | sed -e 's/subject= //g' -e 's/issuer= //g'"
 
 ## Create LSC file for VO
 mkdir -p /etc/grid-security/vomsdir/${VO}
-echo ${lsc_content} > /etc/grid-security/vomsdir/${VO}/${VO_HOST}.lsc
+eval ${make_lsc_cmd} > /etc/grid-security/vomsdir/${VO}/${VO_HOST}.lsc
 
 ## Print out lSC file content
 cat /etc/grid-security/vomsdir/${VO}/${VO_HOST}.lsc
