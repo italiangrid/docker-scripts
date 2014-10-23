@@ -28,11 +28,6 @@ add deployment-scripts /deployment-scripts
 # add StoRM host certificate
 add storm-certificates /storm-certificates
 
-# area for StoRM logs
-volume ["/var/log/storm"]
-
 # area for containers synchronization
 volume ["/opt"]
-
-#entrypoint /deploy.sh
 
