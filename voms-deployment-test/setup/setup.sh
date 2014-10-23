@@ -12,7 +12,7 @@ chmod 400 /voms_server.key.pem /etc/grid-security/hostkey.pem
 
 ## Run puppet
 git clone git://github.com/cnaf/ci-puppet-modules.git /ci-puppet-modules
-puppet apply --modulepath=/modules:/etc/puppet/modules/ /manifest.pp
+puppet apply --modulepath=/ci-puppet-modules/modules:/etc/puppet/modules/ /manifest.pp
 
 # Fetch deployment test script
 wget --no-check-certificate ${DEPLOYMENT_TEST_SCRIPT} \
