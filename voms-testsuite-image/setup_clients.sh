@@ -37,7 +37,7 @@ make_lsc(){
   local vo_port=$3
 
   local make_lsc_cmd="openssl s_client -connect ${vo_host}:${vo_port} | \
-    openssl x509 -noout -subject -issuer | \
+    openssl x509 -noout -subject -issuer 2>/dev/null | \
     sed -e 's/subject= //g' -e 's/issuer= //g'"
 
   mkdir -p /etc/grid-security/vomsdir/${vo_name}
