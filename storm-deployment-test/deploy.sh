@@ -3,6 +3,7 @@ set -x
 
 MODE="${MODE:-clean}"
 PLATFORM="${PLATFORM:-SL6}"
+STORM_REPO=${STORM_REPO:-http://radiohead.cnaf.infn.it:9999/view/REPOS/job/repo_storm_develop_SL6/lastSuccessfulBuild/artifact/storm_develop_sl6.repo}
 
 DEPLOYMENT_SCRIPT="$MODE-deployment_$PLATFORM.sh"
 
@@ -16,7 +17,7 @@ chmod 644 /etc/grid-security/hostcert.pem
 service rsyslog start
 
 cd /deployment-scripts
-sh $DEPLOYMENT_SCRIPT
+sh "STORM_REPO=$STORM_REPO $DEPLOYMENT_SCRIPT"
 
 # configure with yaim
 /opt/glite/yaim/bin/yaim -c -s /etc/storm/siteinfo/storm.def -n se_storm_backend -n se_storm_frontend -n se_storm_gridftp -n se_storm_gridhttps
