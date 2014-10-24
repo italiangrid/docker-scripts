@@ -5,11 +5,8 @@ STORM_BE_HOST="${STORM_BE_HOST:-docker-storm.cnaf.infn.it}"
 
 echo 'export X509_USER_PROXY="/tmp/x509up_u$(id -u)"'>/etc/profile.d/x509_user_proxy.sh
 
-progress=('/' '-' '\\' '|')
-
 MAX_RETRIES=200
 
-index=0
 attempts=1
 
 CMD="nc -z ${STORM_BE_HOST} 8444"
@@ -19,9 +16,7 @@ $CMD
 
 while [ $? -eq 1 ] && [ $attempts -le  $MAX_RETRIES ];
 do
-  echo -ne ${progress[$index]}\\r
   sleep 5
-  let index=(index+1)%4
   let attempts=attempts+1
   $CMD
 done
