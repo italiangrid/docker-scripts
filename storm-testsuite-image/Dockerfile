@@ -7,6 +7,9 @@ run git clone git://github.com/cnaf/ci-puppet-modules.git /ci-puppet-modules
 add manifest.pp /
 run puppet apply --modulepath=/ci-puppet-modules/modules:/etc/puppet/modules/ /manifest.pp
 
+# install netcat
+run yum install -y nc
+
 # install fetch-crl
 run yum install -y fetch-crl
 

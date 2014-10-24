@@ -28,6 +28,3 @@ add deployment-scripts /deployment-scripts
 # add StoRM host certificate
 add storm-certificates /storm-certificates
 
-# area for containers synchronization
-volume ["/opt"]
-

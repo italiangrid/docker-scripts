@@ -35,7 +35,4 @@ pkill -f storm-frontend-server
 # disable frontend monitor
 sed -i -e '/monitoring.enabled=true/c\monitoring.enabled=false' /etc/storm/frontend-server/storm-frontend-server.conf
 
-# write file for synchronization
-touch /opt/start-testsuite
-
 sh /daemons/frontend

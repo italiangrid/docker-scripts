@@ -23,6 +23,9 @@ adduser -r storm
 # install storm packages
 yum install -y --enablerepo=centosplus emi-storm-backend-mp emi-storm-frontend-mp emi-storm-globus-gridftp-mp emi-storm-gridhttps-mp
 
+# avoid starting frontend server
+sed -i -e '/\/sbin\/service storm-frontend-server start/c\\#\/sbin\/service storm-frontend-server start' /opt/glite/yaim/functions/local/config_storm_frontend
+
 # avoid ntp check
 echo "config_ntp () {"> /opt/glite/yaim/functions/local/config_ntp
 echo "return 0">> /opt/glite/yaim/functions/local/config_ntp
