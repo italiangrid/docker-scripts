@@ -7,7 +7,7 @@ echo 'export X509_USER_PROXY="/tmp/x509up_u$(id -u)"'>/etc/profile.d/x509_user_p
 
 progress=('/' '-' '\\' '|')
 
-MAX_RETRIES=100
+MAX_RETRIES=200
 
 index=0
 attempts=1
