@@ -18,7 +18,7 @@ service rsyslog start
 
 cd /deployment-scripts
 chmod +x $DEPLOYMENT_SCRIPT
-STORM_REPO=$STORM_REPO $DEPLOYMENT_SCRIPT
+STORM_REPO=$STORM_REPO ./$DEPLOYMENT_SCRIPT
 
 # configure with yaim
 /opt/glite/yaim/bin/yaim -c -s /etc/storm/siteinfo/storm.def -n se_storm_backend -n se_storm_frontend -n se_storm_gridftp -n se_storm_gridhttps
