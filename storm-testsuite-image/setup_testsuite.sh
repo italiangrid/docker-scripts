@@ -21,8 +21,7 @@ do
   $CMD
 done
 
-if [ $attempts -gt $MAX_RETRIES ]
-  then
+if [ $attempts -gt $MAX_RETRIES ]; then
     echo "Timeout!"
     exit 1
 fi
