@@ -4,7 +4,7 @@
 git clone git://github.com/cnaf/ci-puppet-modules.git /ci-puppet-modules
 
 #install all puppet modules required by the StoRM testsuite
-puppet apply --modulepath=/ci-puppet-modules/modules:/etc/puppet/modules/ /manifest.pp
+puppet apply --modulepath=/ci-puppet-modules/modules:/etc/puppet/modules/ --debug --detailed-exitcodes /manifest.pp
 
 # install utilities
 yum install -y fetch-crl nc
