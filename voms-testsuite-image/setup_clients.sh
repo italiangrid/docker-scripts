@@ -4,13 +4,13 @@ set -x
 ## The testsuite repo
 TESTSUITE=${TESTSUITE:-git://github.com/italiangrid/voms-testsuite.git}
 
-## VO 1 configuration
-VO1_HOST=${VO1_HOST:-vgrid02.cnaf.infn.it}
+# VO 1 configuration
+VO1_HOST=${VO1_HOST:-voms-server}
 VO1_PORT=${VO1_PORT:-15000}
-VO1=${VO1:-test.vo}
-VO1_ISSUER=${VO1_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=vgrid02.cnaf.infn.it}
+VO1=${VO1:-vomsci}
+VO1_ISSUER=${VO1_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=voms-server}
 
-## VO 2 configuration
+# VO 2 configuration
 VO2_HOST=${VO2_HOST:-vgrid02.cnaf.infn.it}
 VO2_PORT=${VO2_PORT:-15001}
 VO2=${VO2:-test.vo.2}
@@ -45,6 +45,24 @@ make_lsc(){
   cat /etc/grid-security/vomsdir/${vo_name}/${vo_host}.lsc
 }
 
+## Wait for a connection to a specific host ($1) and port ($2)
+wait_host(){
+  MAX_RETRIES=200
+  attempts=1
+  CMD="nc -z $1 $2"
+  echo "Waiting for VOMS services... "
+  $CMD
+  while [ $? -eq 1 ] && [ $attempts -le $MAX_RETRIES ];
+  do
+  sleep 5
+  let attempts=attempts+1
+  $CMD
+  done
+  if [ $attempts -gt $MAX_RETRIES ]; then
+  echo "Timeout!"
+  exit 1
+  fi
+}
 
 # check and install the extra repo for VOMS clients if provided by user
 if [ -z $VOMSREPO ]; then
@@ -60,7 +78,9 @@ yum install -y voms-clients3
 yum install -y myproxy
 
 ## Setup vomses file for the two test VOs
+wait_host ${VO1_HOST} ${VO1_PORT}
 make_vomses ${VO1} ${VO1_HOST} ${VO1_PORT} ${VO1_ISSUER}
+wait_host ${VO2_HOST} ${VO2_PORT}
 make_vomses ${VO2} ${VO2_HOST} ${VO2_PORT} ${VO2_ISSUER}
 
 ## Setup LSC file for the two test VOs
