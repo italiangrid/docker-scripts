@@ -47,8 +47,7 @@ wget $WGET_OPTIONS  $STORM_REPO -O /etc/yum.repos.d/storm.repo
 
 # update
 yum clean all
-yum update -y emi-storm-backend-mp emi-storm-frontend-mp emi-storm-globus-gridftp-mp emi-storm-gridhttps-mp
-
+yum update -y
 
 fix_yaim
 
