@@ -21,6 +21,11 @@ yum install -y fetch-crl nc
 # run fetch-crl
 fetch-crl
 
+# check if errors occurred after fetch-crl execution
+if [ $? != 0 ]; then
+  exit 1
+fi
+
 # install clients
 yum install -y voms-clients3 myproxy
 
