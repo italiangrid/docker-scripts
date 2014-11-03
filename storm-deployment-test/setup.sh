@@ -16,5 +16,13 @@ if [[ ( $? -eq 4 ) || ( $? -eq 6 ) ]]; then
 fi
 
 # install acl and extended attributes support
-yum install -y attr acl
+yum install -y attr acl fetch-crl
+
+# run fetch-crl
+fetch-crl
+
+# check if errors occurred after fetch-crl execution
+if [ $? != 0 ]; then
+  exit 1
+fi
 
