@@ -9,9 +9,10 @@ ENV COMPONENT server
 ENV MODE clean
 ENV PLATFORM SL6
 ENV UPDATE yes
+ENV SYNC_FILE /sync/start-ts
 
 # expose the default ports for the services VOMS and VOMS-admin
 EXPOSE 15000 8443
 
 # set an entrypoint for the voms-deployment-test script and keep the container alive
-ENTRYPOINT /voms-deployment-test.sh -r $REPO -c $COMPONENT -m $MODE -p $PLATFORM -u $UPDATE && sleep infinity
+ENTRYPOINT /voms-deployment-test.sh -r $REPO -c $COMPONENT -m $MODE -p $PLATFORM -u $UPDATE && touch $SYNC_FILE && sleep infinity
