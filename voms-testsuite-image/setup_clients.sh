@@ -1,20 +1,47 @@
 #!/bin/bash
-set -x
+set -ex
+
+trap "exit 1" TERM
+export TOP_PID=$$
+
+terminate() {
+    echo $1 && kill -s TERM $TOP_PID
+}
 
 ## The testsuite repo
 TESTSUITE=${TESTSUITE:-git://github.com/italiangrid/voms-testsuite.git}
 
-## VO 1 configuration
-VO1_HOST=${VO1_HOST:-vgrid02.cnaf.infn.it}
+# VO 1 configuration
+VO1_HOST=${VO1_HOST:-voms-server}
 VO1_PORT=${VO1_PORT:-15000}
-VO1=${VO1:-test.vo}
-VO1_ISSUER=${VO1_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=vgrid02.cnaf.infn.it}
+VO1=${VO1:-vomsci}
+VO1_ISSUER=${VO1_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=voms-server}
 
-## VO 2 configuration
+# VO 2 configuration
 VO2_HOST=${VO2_HOST:-vgrid02.cnaf.infn.it}
 VO2_PORT=${VO2_PORT:-15001}
 VO2=${VO2:-test.vo.2}
 VO2_ISSUER=${VO2_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=vgrid02.cnaf.infn.it}
+
+SYNC_SLEEP_TIME=${SYNC_SLEEP_TIME:-5}
+SYNC_FILE=${SYNC_FILE:-/sync/start-ts}
+SYNC_MAX_RETRIES=${SYNC_MAX_RETRIES:-200}
+
+sync(){
+  if [ -n ${DO_SYNC} ]; then
+
+    attempts=1
+
+    while [ ! -f ${SYNC_FILE} ]; do
+      sleep ${SYNC_SLEEP_TIME}
+      let attempts+=1
+      [ ${attempts} -ge ${SYNC_MAX_RETRIES} ] && break
+    done
+
+    [ ${attempts} -ge ${SYNC_MAX_RETRIES} ] && terminate "Sync timeout!"
+
+  fi
+}
 
 ## Creates a VOMSES file
 make_vomses() {
@@ -45,7 +72,6 @@ make_lsc(){
   cat /etc/grid-security/vomsdir/${vo_name}/${vo_host}.lsc
 }
 
-
 # check and install the extra repo for VOMS clients if provided by user
 if [ -z $VOMSREPO ]; then
   echo "No clients repo provided. Installing default version (EMI3)"
@@ -60,6 +86,7 @@ yum install -y voms-clients3
 yum install -y myproxy
 
 ## Setup vomses file for the two test VOs
+sync
 make_vomses ${VO1} ${VO1_HOST} ${VO1_PORT} ${VO1_ISSUER}
 make_vomses ${VO2} ${VO2_HOST} ${VO2_PORT} ${VO2_ISSUER}
 
