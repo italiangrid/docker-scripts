@@ -11,7 +11,7 @@ First build the centos6/puppetbase:1.0 image as explained in puppet-baseimage/RE
 
 Then run: 
 
-    docker build --no-cache -t centos6/voms-ts:1.0 .
+    docker build --no-cache -t italiangrid:voms-ts .
 
 Changes to added scripts (*setup_clients.sh* and *get_puppet_modules.sh*) require a re-build of the image.
 

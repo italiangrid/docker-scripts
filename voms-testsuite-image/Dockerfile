@@ -14,12 +14,6 @@ run mkdir /home/voms/.globus
 user root
 workdir /home/voms
 
-# install setup script
-#add setup.sh /
-#run chmod +x /setup.sh
-
 # install setup client script
 add setup_clients.sh /
 run chmod +x /setup_clients.sh
-
-#ENTRYPOINT /setup_clients.sh

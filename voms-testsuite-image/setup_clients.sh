@@ -1,5 +1,12 @@
 #!/bin/bash
-set -x
+set -ex
+
+trap "exit 1" TERM
+export TOP_PID=$$
+
+terminate() {
+    echo $1 && kill -s TERM $TOP_PID
+}
 
 ## The testsuite repo
 TESTSUITE=${TESTSUITE:-git://github.com/italiangrid/voms-testsuite.git}
@@ -15,6 +22,22 @@ VO2_HOST=${VO2_HOST:-vgrid02.cnaf.infn.it}
 VO2_PORT=${VO2_PORT:-15001}
 VO2=${VO2:-test.vo.2}
 VO2_ISSUER=${VO2_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=vgrid02.cnaf.infn.it}
+
+SYNC_SLEEP_TIME=${SYNC_SLEEP_TIME:-5}
+SYNC_FILE=${SYNC_FILE:-/sync/start-ts}
+SYNC_MAX_RETRIES=200
+
+sync(){
+  attempts=1
+
+  while [ ! -f ${SYNC_FILE} ]; do
+    sleep ${SYNC_SLEEP_TIME}
+    let attempts+=1
+    [ ${attempts} -ge ${SYNC_MAX_RETRIES} ] && break
+  done
+
+  [ ${attempts} -ge ${SYNC_MAX_RETRIES} ] && terminate "Sync timeout!"
+}
 
 ## Creates a VOMSES file
 make_vomses() {
@@ -45,25 +68,6 @@ make_lsc(){
   cat /etc/grid-security/vomsdir/${vo_name}/${vo_host}.lsc
 }
 
-## Wait for a connection to a specific host ($1) and port ($2)
-wait_host(){
-  MAX_RETRIES=200
-  attempts=1
-  CMD="nc -z $1 $2"
-  echo "Waiting for VOMS services... "
-  $CMD
-  while [ $? -eq 1 ] && [ $attempts -le $MAX_RETRIES ];
-  do
-  sleep 5
-  let attempts=attempts+1
-  $CMD
-  done
-  if [ $attempts -gt $MAX_RETRIES ]; then
-  echo "Timeout!"
-  exit 1
-  fi
-}
-
 # check and install the extra repo for VOMS clients if provided by user
 if [ -z $VOMSREPO ]; then
   echo "No clients repo provided. Installing default version (EMI3)"
@@ -78,9 +82,8 @@ yum install -y voms-clients3
 yum install -y myproxy
 
 ## Setup vomses file for the two test VOs
-wait_host ${VO1_HOST} ${VO1_PORT}
+sync
 make_vomses ${VO1} ${VO1_HOST} ${VO1_PORT} ${VO1_ISSUER}
-wait_host ${VO2_HOST} ${VO2_PORT}
 make_vomses ${VO2} ${VO2_HOST} ${VO2_PORT} ${VO2_ISSUER}
 
 ## Setup LSC file for the two test VOs
