@@ -25,18 +25,22 @@ VO2_ISSUER=${VO2_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=vgrid02.cnaf.infn.it}
 
 SYNC_SLEEP_TIME=${SYNC_SLEEP_TIME:-5}
 SYNC_FILE=${SYNC_FILE:-/sync/start-ts}
-SYNC_MAX_RETRIES=200
+SYNC_MAX_RETRIES=${SYNC_MAX_RETRIES:-200}
 
 sync(){
-  attempts=1
+  if [ -n ${DO_SYNC} ]; then
 
-  while [ ! -f ${SYNC_FILE} ]; do
-    sleep ${SYNC_SLEEP_TIME}
-    let attempts+=1
-    [ ${attempts} -ge ${SYNC_MAX_RETRIES} ] && break
-  done
+    attempts=1
 
-  [ ${attempts} -ge ${SYNC_MAX_RETRIES} ] && terminate "Sync timeout!"
+    while [ ! -f ${SYNC_FILE} ]; do
+      sleep ${SYNC_SLEEP_TIME}
+      let attempts+=1
+      [ ${attempts} -ge ${SYNC_MAX_RETRIES} ] && break
+    done
+
+    [ ${attempts} -ge ${SYNC_MAX_RETRIES} ] && terminate "Sync timeout!"
+
+  fi
 }
 
 ## Creates a VOMSES file
