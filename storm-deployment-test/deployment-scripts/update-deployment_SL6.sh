@@ -49,6 +49,11 @@ wget $WGET_OPTIONS  $STORM_REPO -O /etc/yum.repos.d/storm.repo
 yum clean all
 yum update -y
 
+if [ $? != 0 ]; then
+    echo "Problem occurred while updating the system!"
+    exit 1
+fi
+
 fix_yaim
 
 # do yaim
