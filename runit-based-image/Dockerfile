@@ -1,4 +1,4 @@
-FROM centos6/puppetbase:1.0
+FROM italiangrid:base
 
 ENV HOME /root
 RUN mkdir /build

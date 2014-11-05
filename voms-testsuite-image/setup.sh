@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -x
 
 trap "exit 1" TERM
 export TOP_PID=$$
@@ -14,14 +14,14 @@ TESTSUITE=${TESTSUITE:-git://github.com/italiangrid/voms-testsuite.git}
 # VO 1 configuration
 VO1_HOST=${VO1_HOST:-voms-server}
 VO1_PORT=${VO1_PORT:-15000}
-VO1=${VO1:-vomsci}
+VO1=${VO1:-vo.0}
 VO1_ISSUER=${VO1_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=voms-server}
 
 # VO 2 configuration
-VO2_HOST=${VO2_HOST:-vgrid02.cnaf.infn.it}
+VO2_HOST=${VO2_HOST:-voms-server}
 VO2_PORT=${VO2_PORT:-15001}
-VO2=${VO2:-test.vo.2}
-VO2_ISSUER=${VO2_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=vgrid02.cnaf.infn.it}
+VO2=${VO2:-vo.1}
+VO2_ISSUER=${VO2_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=voms-server}
 
 SYNC_SLEEP_TIME=${SYNC_SLEEP_TIME:-5}
 SYNC_FILE=${SYNC_FILE:-/sync/start-ts}
@@ -63,7 +63,7 @@ make_lsc(){
   local vo_host=$2
   local vo_port=$3
 
-  local make_lsc_cmd="openssl s_client -connect ${vo_host}:${vo_port} | \
+  local make_lsc_cmd="openssl s_client -connect ${vo_host}:${vo_port} 2>/dev/null | \
     openssl x509 -noout -subject -issuer 2>/dev/null | \
     sed -e 's/subject= //g' -e 's/issuer= //g'"
 
@@ -95,7 +95,7 @@ make_lsc ${VO1} ${VO1_HOST} ${VO1_PORT}
 make_lsc ${VO2} ${VO2_HOST} ${VO2_PORT}
 
 cat << EOF > /home/voms/run-testsuite.sh
-#!/bin/bash 
+#!/bin/bash
 set -ex
 git clone $TESTSUITE
 pushd ./voms-testsuite

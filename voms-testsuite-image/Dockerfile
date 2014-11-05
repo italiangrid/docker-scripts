@@ -1,4 +1,4 @@
-FROM centos6/puppetbase:1.0
+FROM italiangrid:base
 
 add manifest.pp /
 
@@ -15,5 +15,7 @@ user root
 workdir /home/voms
 
 # install setup client script
-add setup_clients.sh /
-run chmod +x /setup_clients.sh
+add setup.sh /
+run chmod +x /setup.sh
+
+ENTRYPOINT /setup.sh

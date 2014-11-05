@@ -1,6 +1,6 @@
-FROM    centos6/puppetbase:1.0
+FROM italiangrid:base
 
-# add and run setup 
+# add and run setup
 add . /
 run chmod +x /setup.sh && /setup.sh
 
