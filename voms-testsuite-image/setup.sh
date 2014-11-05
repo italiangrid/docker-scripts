@@ -33,7 +33,7 @@ INCLUDE_TESTS=${INCLUDE_TESTS:-""}
 EXCLUDE_TESTS=${EXCLUDE_TESTS:-""}
 
 sync(){
-  if [ -n "${DO_SYNC}" ]; then
+  if [ -z "${NO_SYNC}" ]; then
 
     attempts=1
 
