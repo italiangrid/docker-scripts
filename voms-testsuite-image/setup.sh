@@ -8,27 +8,32 @@ terminate() {
     echo $1 && kill -s TERM $TOP_PID
 }
 
+env
+
 ## The testsuite repo
 TESTSUITE=${TESTSUITE:-git://github.com/italiangrid/voms-testsuite.git}
 
 # VO 1 configuration
+VO1=${VO1:-vo.0}
 VO1_HOST=${VO1_HOST:-voms-server}
 VO1_PORT=${VO1_PORT:-15000}
-VO1=${VO1:-vo.0}
-VO1_ISSUER=${VO1_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=voms-server}
+VO1_ISSUER=${VO1_ISSUER:-/C=IT/O=IGI/CN=voms-server}
 
 # VO 2 configuration
+VO2=${VO2:-vo.1}
 VO2_HOST=${VO2_HOST:-voms-server}
 VO2_PORT=${VO2_PORT:-15001}
-VO2=${VO2:-vo.1}
-VO2_ISSUER=${VO2_ISSUER:-/C=IT/O=INFN/OU=Host/L=CNAF/CN=voms-server}
+VO2_ISSUER=${VO2_ISSUER:-/C=IT/O=IGI/CN=voms-server}
 
 SYNC_SLEEP_TIME=${SYNC_SLEEP_TIME:-5}
 SYNC_FILE=${SYNC_FILE:-/sync/start-ts}
 SYNC_MAX_RETRIES=${SYNC_MAX_RETRIES:-200}
 
+INCLUDE_TESTS=${INCLUDE_TESTS:-""}
+EXCLUDE_TESTS=${EXCLUDE_TESTS:-""}
+
 sync(){
-  if [ -n ${DO_SYNC} ]; then
+  if [ -n "${DO_SYNC}" ]; then
 
     attempts=1
 
@@ -82,8 +87,7 @@ else
   fi
 fi
 
-yum install -y voms-clients3
-yum install -y myproxy
+yum -y install voms-clients3 myproxy
 
 ## Setup vomses file for the two test VOs
 sync
@@ -94,21 +98,29 @@ make_vomses ${VO2} ${VO2_HOST} ${VO2_PORT} ${VO2_ISSUER}
 make_lsc ${VO1} ${VO1_HOST} ${VO1_PORT}
 make_lsc ${VO2} ${VO2_HOST} ${VO2_PORT}
 
-cat << EOF > /home/voms/run-testsuite.sh
-#!/bin/bash
-set -ex
-git clone $TESTSUITE
-pushd ./voms-testsuite
-pybot \
-  --variable vo1:$VO1 \
+ROBOT_OPTIONS="--variable vo1:$VO1 \
   --variable vo1_host:$VO1_HOST \
   --variable vo1_issuer:$VO1_ISSUER \
   --variable vo2:$VO2 \
   --variable vo2_host:$VO2_HOST \
   --variable vo2_issuer:$VO2_ISSUER \
   --pythonpath lib \
-  -d reports \
-  tests/clients
+  -d reports "
+
+if [ -n "${INCLUDE_TESTS}" ]; then
+  ROBOT_OPTIONS="${ROBOT_OPTIONS} --include ${INCLUDE_TESTS}"
+fi
+
+if [ -n "${EXCLUDE_TESTS}" ]; then
+  ROBOT_OPTIONS="${ROBOT_OPTIONS} --exclude ${EXCLUDE_TESTS}"
+fi
+
+cat << EOF > /home/voms/run-testsuite.sh
+#!/bin/bash
+set -ex
+git clone ${TESTSUITE}
+pushd ./voms-testsuite
+ROBOT_OPTIONS="${ROBOT_OPTIONS}" pybot tests/clients
 EOF
 
 chmod +x /home/voms/run-testsuite.sh
