@@ -15,6 +15,20 @@ if [[ ( $? -eq 4 ) || ( $? -eq 6 ) ]]; then
   exit 1
 fi
 
+# install the MyProxy distribution
+yum install -y myproxy myproxy-server myproxy-admin myproxy-doc 
+
+# copy cert and key to proper locations
+cp myproxy-server-certificates/myproxy_server.cert.pem /etc/grid-security/myproxy/hostcert.pem
+cp myproxy-server-certificates/myproxy_server.key.pem /etc/grid-security/myproxy/hostkey.pem
+
+# chown -R root:root /var/lib/myproxy
+
+chown myproxy:myproxy /etc/grid-security/myproxy/*
+
+chmod 400 /etc/grid-security/myproxy/hostkey.pem 
+chmod 644 /etc/grid-security/myproxy/hostcert.pem 
+
 # install acl and extended attributes support
 yum install -y fetch-crl
 
