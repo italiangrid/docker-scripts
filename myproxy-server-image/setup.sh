@@ -40,3 +40,5 @@ if [ $? != 0 ]; then
   exit 1
 fi
 
+# fix init functions
+sed -ie 's/pidof -c/\pidof/' /etc/rc.d/init.d/functions
