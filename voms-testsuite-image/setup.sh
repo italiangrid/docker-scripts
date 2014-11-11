@@ -36,7 +36,6 @@ sync(){
   if [ -z "${NO_SYNC}" ]; then
 
     attempts=1
-
     while [ ! -f ${SYNC_FILE} ]; do
       sleep ${SYNC_SLEEP_TIME}
       let attempts+=1
