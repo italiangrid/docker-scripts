@@ -25,6 +25,9 @@ VO2_HOST=${VO2_HOST:-voms-server}
 VO2_PORT=${VO2_PORT:-15001}
 VO2_ISSUER=${VO2_ISSUER:-/C=IT/O=IGI/CN=voms-server}
 
+MYPROXY_SERVER=${MYPROXY_SERVER:-omii001.cnaf.infn.it}
+MYPROXY_PASSWORD=${MYPROXY_PASSWORD:-123456}
+
 SYNC_SLEEP_TIME=${SYNC_SLEEP_TIME:-5}
 SYNC_FILE=${SYNC_FILE:-/sync/start-ts}
 SYNC_MAX_RETRIES=${SYNC_MAX_RETRIES:-200}
@@ -104,6 +107,8 @@ ROBOT_OPTIONS="--variable vo1:$VO1 \
   --variable vo2:$VO2 \
   --variable vo2_host:$VO2_HOST \
   --variable vo2_issuer:$VO2_ISSUER \
+  --variable myproxy_server: $MYPROXY_SERVER \
+  --variable myProxyPassPhrase: $MYPROXY_PASSWORD \
   --pythonpath lib \
   -d reports "
 
