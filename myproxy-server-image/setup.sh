@@ -40,5 +40,13 @@ if [ $? != 0 ]; then
   exit 1
 fi
 
+# backup deafult configuration files
+mv /etc/sysconfig/myproxy-server /etc/sysconfig/myproxy-server.bkp
+mv /etc/myproxy-server.config /etc/myproxy-server.config.bkp
+
+# copy myproxy configuration files to proper locations
+cp etc_sysconfig_myproxy-server /etc/sysconfig/myproxy-server 
+cp etc_myproxy-server.config /etc/myproxy-server.config
+
 # fix init functions
 sed -ie 's/pidof -c/\pidof/' /etc/rc.d/init.d/functions

@@ -1,10 +1,9 @@
 #!/bin/bash
 set -x
 
-# start logging
+# activate logging service
 service rsyslog start
 
-# start myproxy-server 
+# activate myproxy-server service
 service myproxy-server start
-
 
