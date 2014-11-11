@@ -48,3 +48,5 @@ mv /etc/myproxy-server.config /etc/myproxy-server.config.bkp
 cp etc_sysconfig_myproxy-server /etc/sysconfig/myproxy-server 
 cp etc_myproxy-server.config /etc/myproxy-server.config
 
+# fix init functions
+sed -ie 's/pidof -c/\pidof/' /etc/rc.d/init.d/functions
