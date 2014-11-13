@@ -1,0 +1,32 @@
+
+/* Customize container */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1020px;
+  }
+}
+
+tr.noborder th, tr.noborder td {
+	border-top: none;
+}
+
+.table>tbody>tr>td {
+	vertical-align: middle;
+}
+
+td.prio_urgent, td.prio_very_urgent {
+	color: #c09853;
+/*	background-color: #fcf8e3 !important; */
+	font-weight: bold;
+}
+
+td.prio_top_priority {
+	color: #b94a48;
+/*	background-color: #f2dede !important; */
+	font-weight: bold;
+}
+
+.badge-title{
+	background-color: white;
+	color: #428bca;
+}
