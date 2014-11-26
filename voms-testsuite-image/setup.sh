@@ -100,6 +100,9 @@ make_vomses ${VO2} ${VO2_HOST} ${VO2_PORT} ${VO2_ISSUER}
 make_lsc ${VO1} ${VO1_HOST} ${VO1_PORT}
 make_lsc ${VO2} ${VO2_HOST} ${VO2_PORT}
 
+## Print out voms clients version
+voms-proxy-init --version
+
 ROBOT_OPTIONS="--variable vo1:$VO1 \
   --variable vo1_host:$VO1_HOST \
   --variable vo1_issuer:$VO1_ISSUER \
