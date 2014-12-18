@@ -1,4 +1,4 @@
-FROM italiangrid:base
+FROM italiangrid/base
 
 ADD setup /
 RUN chmod 755 /setup.sh

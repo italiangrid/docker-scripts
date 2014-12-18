@@ -1,4 +1,4 @@
-FROM italiangrid:base
+FROM italiangrid/base
 
 add manifest.pp /
 
