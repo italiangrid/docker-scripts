@@ -34,6 +34,9 @@ echo "}">> /opt/glite/yaim/functions/local/config_ntp
 # install yaim configuration
 sh ./install-yaim-configuration.sh
 
+# Sleep more in bdii init script to avoid issues on docker
+sed -i 's/sleep 2/sleep 5/' /etc/init.d/bdii
+
 # configure with yaim
 /opt/glite/yaim/bin/yaim -c -s /etc/storm/siteinfo/storm.def -n se_storm_backend -n se_storm_frontend -n se_storm_gridftp -n se_storm_gridhttps
 
