@@ -39,6 +39,9 @@ usermod -a -G storm gridhttps
 # install yaim configuration
 sh ./install-yaim-configuration.sh
 
+# Sleep more avoid issues on docker
+sed -i 's/sleep 20/sleep 30/' /etc/init.d/storm-backend-server
+
 # Sleep more in bdii init script to avoid issues on docker
 sed -i 's/sleep 2/sleep 5/' /etc/init.d/bdii
 
@@ -58,6 +61,9 @@ if [ $? != 0 ]; then
 fi
 
 fix_yaim
+
+# Sleep more avoid issues on docker
+sed -i 's/sleep 20/sleep 30/' /etc/init.d/storm-backend-server
 
 # Sleep more in bdii init script to avoid issues on docker
 sed -i 's/sleep 2/sleep 5/' /etc/init.d/bdii
