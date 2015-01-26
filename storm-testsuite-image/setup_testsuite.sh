@@ -5,7 +5,7 @@ STORM_BE_HOST="${STORM_BE_HOST:-docker-storm.cnaf.infn.it}"
 
 echo 'export X509_USER_PROXY="/tmp/x509up_u$(id -u)"'>/etc/profile.d/x509_user_proxy.sh
 
-MAX_RETRIES=400
+MAX_RETRIES=600
 
 attempts=1
 
