@@ -17,6 +17,9 @@ chmod 644 /etc/grid-security/hostcert.pem
 service rsyslog start
 
 cd /deployment-scripts
+
+wget https://raw.githubusercontent.com/italiangrid/storm-deployment-test/master/siteinfo/storm.def -O ./siteinfo/storm.def
+
 chmod +x $DEPLOYMENT_SCRIPT
 STORM_REPO=$STORM_REPO ./$DEPLOYMENT_SCRIPT
 
