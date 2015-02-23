@@ -64,11 +64,6 @@ JAVA_LOG_LEVEL=${JAVA_LOG_LEVEL:-ERROR}
 VOMS_JAVA_OPTS="-DVOMS_LOG_LEVEL=${VOMS_LOG_LEVEL} -DJAVA_LOG_LEVEL=${JAVA_LOG_LEVEL} $VOMS_JAVA_OPTS"
 
 if [ -n "$ENABLE_JREBEL" ]; then
-  #if [ ! -f "/jrebel/jrebel.jar" ]; then
-    #echo "You need to mount a volume in /jrebel containing the jrebel jar and your jrebel license."
-  #else
-    #su voms -s /bin/bash -c "java -jar /jrebel/jrebel.jar -activate /jrebel/jrebel.license"
-    #echo "JRebel license correctly activated."
     VOMS_JAVA_OPTS="-javaagent:/jrebel/jrebel.jar -Drebel.stats=false -Drebel.usage_reporting=false $VOMS_JAVA_OPTS"
 fi
 
