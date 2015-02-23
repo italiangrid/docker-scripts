@@ -2,11 +2,11 @@
 set -ex
 
 groupadd -r voms
-useradd -r voms -g voms
+useradd voms -g voms
 
-ls -l /pkg
+ls -l /code
 
-tar -C / -xvzf /pkg/voms-admin-server.tar.gz
+tar -C / -xvzf /code/voms-admin-server/target/voms-admin-server.tar.gz
 
 chown -R voms:voms /var/lib/voms-admin/work /var/log/voms-admin
 
@@ -57,10 +57,35 @@ chown voms:voms /etc/voms-admin/voms-admin-server.logback /etc/voms-admin/test/l
 # Deploy test vo
 touch '/var/lib/voms-admin/vo.d/test'
 
-VOMS_LOG_LEVEL=${VOMS_LOG_LEVEL:-DEBUG}
+# Set log levels
+VOMS_LOG_LEVEL=${VOMS_LOG_LEVEL:-INFO}
 JAVA_LOG_LEVEL=${JAVA_LOG_LEVEL:-ERROR}
 
 VOMS_JAVA_OPTS="-DVOMS_LOG_LEVEL=${VOMS_LOG_LEVEL} -DJAVA_LOG_LEVEL=${JAVA_LOG_LEVEL} $VOMS_JAVA_OPTS"
+
+if [ -n "$ENABLE_JREBEL" ]; then
+  #if [ ! -f "/jrebel/jrebel.jar" ]; then
+    #echo "You need to mount a volume in /jrebel containing the jrebel jar and your jrebel license."
+  #else
+    #su voms -s /bin/bash -c "java -jar /jrebel/jrebel.jar -activate /jrebel/jrebel.license"
+    #echo "JRebel license correctly activated."
+    VOMS_JAVA_OPTS="-javaagent:/jrebel/jrebel.jar -Drebel.stats=false -Drebel.usage_reporting=false $VOMS_JAVA_OPTS"
+fi
+
+if [ -z "$VOMS_DEBUG_PORT" ]; then
+  VOMS_DEBUG_PORT=1044
+fi
+
+if [ -z "$VOMS_DEBUG_SUSPEND" ]; then
+  VOMS_DEBUG_SUSPEND="n"
+fi
+
+if [ ! -z "$VOMS_DEBUG" ]; then
+  VOMS_JAVA_OPTS="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=$VOMS_DEBUG_PORT,suspend=$VOMS_DEBUG_SUSPEND $VOMS_JAVA_OPTS"
+fi
+
+## Add test0 admin
+voms-db-util add-admin --vo test --cert /usr/share/igi-test-ca/test0.cert.pem || echo "Error creating test0 admin. Does it already exist?"
 
 # Start service
 su voms -s /bin/bash -c "java $VOMS_JAVA_OPTS -jar /usr/share/java/voms-container.jar $VOMS_ARGS"
