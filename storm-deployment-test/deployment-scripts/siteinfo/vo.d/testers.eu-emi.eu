@@ -1,6 +1,0 @@
-SW_DIR=$VO_SW_DIR/testers.eu-emi.eu
-DEFAULT_SE=$SE_HOST
-STORAGE_DIR=$CLASSIC_STORAGE_DIR/testers.eu-emi.eu
-VOMS_SERVERS="'vomss://emitestbed07.cnaf.infn.it:8443/voms/testers.eu-emi.eu?/testers.eu-emi.eu'"
-VOMSES="'testers.eu-emi.eu emitestbed07.cnaf.infn.it 15002 /C=IT/O=INFN/OU=Host/L=CNAF/CN=emitestbed07.cnaf.infn.it testers.eu-emi.eu'"
-VOMS_CA_DN="'/C=IT/O=INFN/CN=INFN CA'"
