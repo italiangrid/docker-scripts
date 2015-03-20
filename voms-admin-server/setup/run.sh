@@ -9,6 +9,9 @@ ls -l /code
 tar -C / -xvzf /code/voms-admin-server/target/voms-admin-server.tar.gz
 
 chown -R voms:voms /var/lib/voms-admin/work /var/log/voms-admin
+cp /etc/grid-security/hostcert.pem  /etc/grid-security/vomscert.pem
+cp /etc/grid-security/hostkey.pem  /etc/grid-security/vomskey.pem
+chown voms:voms /etc/grid-security/voms*.pem
 
 sed -i -e "s#localhost#dev.local.io#g" /etc/voms-admin/voms-admin-server.properties
 
@@ -34,8 +37,15 @@ done
 
 echo 'ok'
 
-# Configure the VO
-if [ -z "$VOMS_SKIP_CONFIGURE" ]; then
+skip_configuration=false
+
+## Skip configuration if requested
+[ -n "$VOMS_SKIP_CONFIGURE" ] && skip_configuration=true
+
+## But only if configuration for the VO exists
+[ ! -e "/etc/voms-admin/test/service.properties" ] && skip_configuration=false
+
+if [ "$skip_configuration" = false ]; then
   voms-configure install \
     --vo test \
     --dbtype mysql \
@@ -46,7 +56,8 @@ if [ -z "$VOMS_SKIP_CONFIGURE" ]; then
     --dbpassword $VOMS_DB_PASSWORD \
     --dbhost db \
     --mail-from $VOMS_MAIL_FROM \
-    --smtp-host mail
+    --smtp-host mail \
+    --membership-check-period 60
 fi
 
 # Setup loggin so that everything goes to stdout
@@ -61,7 +72,7 @@ touch '/var/lib/voms-admin/vo.d/test'
 VOMS_LOG_LEVEL=${VOMS_LOG_LEVEL:-INFO}
 JAVA_LOG_LEVEL=${JAVA_LOG_LEVEL:-ERROR}
 
-VOMS_JAVA_OPTS="-DVOMS_LOG_LEVEL=${VOMS_LOG_LEVEL} -DJAVA_LOG_LEVEL=${JAVA_LOG_LEVEL} $VOMS_JAVA_OPTS"
+VOMS_JAVA_OPTS="-Dvoms.dev=true -DVOMS_LOG_LEVEL=${VOMS_LOG_LEVEL} -DJAVA_LOG_LEVEL=${JAVA_LOG_LEVEL} $VOMS_JAVA_OPTS"
 
 if [ -n "$ENABLE_JREBEL" ]; then
     VOMS_JAVA_OPTS="-javaagent:/jrebel/jrebel.jar -Drebel.stats=false -Drebel.usage_reporting=false $VOMS_JAVA_OPTS"
