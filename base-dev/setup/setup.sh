@@ -1,8 +1,7 @@
 #!/bin/bash
 set -ex
 
-# use http to access EPEL packages
-sed -i "s/mirrorlist=https/mirrorlist=http/" /etc/yum.repos.d/epel.repo
+yum upgrade ca-certificates --disablerepo=epel
 
 ## Setup host certificate
 mkdir -p /etc/grid-security
