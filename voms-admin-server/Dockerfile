@@ -2,6 +2,7 @@ FROM italiangrid/base-dev
 
 ADD setup /
 RUN chmod 755 "/run.sh"
+RUN cp /emi-oracle-11.repo  /etc/yum.repos.d && yum -y install voms-admin-client voms-admin-server oracle-instantclient-basic
 
 ENV VOMS_DB_USERNAME voms
 ENV VOMS_DB_PASSWORD pwd
