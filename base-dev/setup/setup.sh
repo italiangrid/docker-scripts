@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-yum upgrade ca-certificates --disablerepo=epel
+yum -y upgrade ca-certificates --disablerepo=epel
 
 ## Setup host certificate
 mkdir -p /etc/grid-security
