@@ -11,10 +11,11 @@ chmod 400 /etc/grid-security/hostkey.pem
 
 ## Run puppet
 git clone git://github.com/cnaf/ci-puppet-modules.git /ci-puppet-modules
+puppet module install puppetlabs-java
 puppet apply --modulepath=/ci-puppet-modules/modules:/etc/puppet/modules/ /manifest.pp
 
 ## Install minimal utils
-yum -y install nc mysql $JAVA_PACKAGE
+yum -y install nc mysql
 java -version
 
 ## Clean things up

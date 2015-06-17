@@ -115,6 +115,7 @@ TNS_ADMIN=${TNS_ADMIN:-/home/voms}
 
 ORACLE_ENV="LD_LIBRARY_PATH=$ORACLE_LIBRARY_PATH TNS_ADMIN=$TNS_ADMIN"
 
+java -version
 ## Add test0 admin
 voms-db-util add-admin --vo test --cert /usr/share/igi-test-ca/test0.cert.pem || echo "Error creating test0 admin. Does it already exist?"
 
