@@ -29,13 +29,6 @@ if [ $attempts -gt $MAX_RETRIES ]; then
     exit 1
 fi
 
-tags=(`echo $TAGS_TO_EXCLUDE | tr " " "\n"`)
-exclude_str=""
-for tag in "${tags[@]}"
-do
-  exclude_str="$exclude_str --exclude $tag"
-done
-
 # install and execute the StoRM testsuite (develop version) as user "tester"
-exec su - tester sh -c "git clone $TESTSUITE; cd /home/tester/storm-testsuite; git checkout $TESTSUITE_BRANCH; pybot --pythonpath lib --variable backEndHost:$STORM_BE_HOST $exclude_str -d reports $TESTSUITE_TESTS"
+exec su - tester sh -c "git clone $TESTSUITE; cd /home/tester/storm-testsuite; git checkout $TESTSUITE_BRANCH; pybot --pythonpath lib --variable backEndHost:$STORM_BE_HOST --exclude $TAGS_TO_EXCLUDE -d reports $TESTSUITE_TESTS"
 
