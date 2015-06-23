@@ -29,6 +29,9 @@ if [ $attempts -gt $MAX_RETRIES ]; then
     exit 1
 fi
 
+pybot_cmd="pybot --pythonpath lib --variable backEndHost:$STORM_BE_HOST --exclude $TAGS_TO_EXCLUDE -d reports -s $TESTSUITE_TESTS tests"
+echo "pybot command = $pybot_cmd"
+
 # install and execute the StoRM testsuite (develop version) as user "tester"
-exec su - tester sh -c "git clone $TESTSUITE; cd /home/tester/storm-testsuite; git checkout $TESTSUITE_BRANCH; pybot --pythonpath lib --variable backEndHost:$STORM_BE_HOST --exclude $TAGS_TO_EXCLUDE -d reports $TESTSUITE_TESTS"
+exec su - tester sh -c "git clone $TESTSUITE; cd /home/tester/storm-testsuite; git checkout $TESTSUITE_BRANCH; $pybot_cmd"
 
