@@ -25,16 +25,14 @@ STORM_REPO=${STORM_REPO:-http://radiohead.cnaf.infn.it:9999/view/REPOS/job/repo_
 wget $WGET_OPTIONS  http://emisoft.web.cern.ch/emisoft/dist/EMI/3/sl6/x86_64/base/emi-release-3.0.0-2.el6.noarch.rpm
 yum localinstall --nogpgcheck -y emi-release-3.0.0-2.el6.noarch.rpm
 
-# install
-yum clean all
-yum install -y emi-storm-backend-mp emi-storm-frontend-mp emi-storm-globus-gridftp-mp emi-storm-gridhttps-mp
-
-fix_yaim
-
 # add some users
 adduser -r storm
-adduser -r gridhttps
-usermod -a -G storm gridhttps
+
+# install
+yum clean all
+yum install -y emi-storm-backend-mp emi-storm-frontend-mp emi-storm-globus-gridftp-mp storm-webdav
+
+fix_yaim
 
 # install yaim configuration
 sh ./install-yaim-configuration.sh
@@ -46,7 +44,7 @@ sed -i 's/sleep 20/sleep 30/' /etc/init.d/storm-backend-server
 sed -i 's/sleep 2/sleep 5/' /etc/init.d/bdii
 
 # do yaim
-/opt/glite/yaim/bin/yaim -c -d 6 -s /etc/storm/siteinfo/storm.def -n se_storm_backend -n se_storm_frontend -n se_storm_gridftp -n se_storm_gridhttps
+/opt/glite/yaim/bin/yaim -c -d 6 -s /etc/storm/siteinfo/storm.def -n se_storm_backend -n se_storm_frontend -n se_storm_gridftp -n se_storm_webdav
 
 # install the storm repo
 wget $WGET_OPTIONS  $STORM_REPO -O /etc/yum.repos.d/storm.repo
@@ -72,4 +70,4 @@ sed -i 's/sleep 2/sleep 5/' /etc/init.d/bdii
 sh ./post-config-setup.sh
 
 # do yaim
-/opt/glite/yaim/bin/yaim -c -d 6 -s /etc/storm/siteinfo/storm.def -n se_storm_backend -n se_storm_frontend -n se_storm_gridftp -n se_storm_gridhttps
+/opt/glite/yaim/bin/yaim -c -d 6 -s /etc/storm/siteinfo/storm.def -n se_storm_backend -n se_storm_frontend -n se_storm_gridftp -n se_storm_webdav
