@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DOCKER_REGISTRY_HOST=${DOCKER_REGISTRY_HOST:-cloud-vm128.cloud.cnaf.infn.it}
-IMAGES="centos7 argus-pap-centos7 argus-pap-rpm-centos7"
+IMAGES="centos7 argus-pap-centos7 argus-pap-rpm-centos7 repo"
 
 for d in $IMAGES; do
   cd $d
