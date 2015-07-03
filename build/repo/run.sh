@@ -1,12 +1,10 @@
 #!/bin/bash
 set -ex
 
-mkdir -p repo/yum
-mkdir -p repo/src
+PACKAGES_DIR=${PACKAGES_DIR:-/packages}
 
-find /packages/RPMS -name '*.rpm' -exec cp '{}' repo/yum \;
-find /packages/SRPMS -name '*.rpm' -exec cp '{}' repo/src \;
+ls -lR ${PACKAGES_DIR}
+pushd ${PACKAGES_DIR}
 
-pushd repo
-createrepo -v yum
-createrepo -v src
+createrepo -v RPMS
+createrepo -v SRPMS
