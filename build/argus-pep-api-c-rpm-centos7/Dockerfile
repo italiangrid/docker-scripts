@@ -1,9 +1,10 @@
 FROM  italiangrid/build-centos7
 
+RUN yum -y install autoconf automake libtool libcurl-devel
+
 user build
 workdir /home/build
 
 add build.sh /home/build/
-run mkdir /home/build/argus-pap-rpm
 
 CMD sh build.sh
