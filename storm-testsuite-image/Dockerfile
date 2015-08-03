@@ -8,4 +8,4 @@ RUN /setup.sh
 # setup for the tester user
 WORKDIR /home/tester
 
-ENTRYPOINT /setup_testsuite.sh
+CMD /setup_testsuite.sh
