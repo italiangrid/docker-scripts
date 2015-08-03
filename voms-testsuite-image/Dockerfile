@@ -5,7 +5,6 @@ add manifest.pp /
 run git clone git://github.com/cnaf/ci-puppet-modules.git /ci-puppet-modules && \
   puppet apply --modulepath=/ci-puppet-modules/modules:/etc/puppet/modules/ /manifest.pp && \
   yum install -y fetch-crl java-1.6.0-openjdk-devel && \
-  fetch-crl && \
   adduser -d /home/voms voms
 
 user voms
@@ -18,4 +17,4 @@ workdir /home/voms
 add setup.sh /
 run chmod +x /setup.sh
 
-ENTRYPOINT /setup.sh
+CMD /setup.sh
