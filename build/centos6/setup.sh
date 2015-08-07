@@ -1,6 +1,13 @@
 #!/bin/sh
 set -ex
 
+BUILD_USER=${BUILD_USER:-build}
+BUILD_USER_UID=${BUILD_USER_UID:-1234}
+BUILD_USER_HOME=${BUILD_USER_HOME:-/home/${BUILD_USER}}
+
+# Use only GARR and CERN mirrors
+echo "include_only=.garr.it,.cern.ch" >> /etc/yum/pluginconf.d/fastestmirror.conf
+
 yum clean all
 yum install -y hostname epel-release
 yum -y update
@@ -16,10 +23,10 @@ java -version
 javac -version
 mvn --version
 
-adduser build
-mkdir /home/build/.m2
-cp /settings.xml /home/build/.m2
+adduser --uid ${BUILD_USER_UID} ${BUILD_USER}
+mkdir ${BUILD_USER_HOME}/.m2
+cp /settings.xml ${BUILD_USER_HOME}/.m2
 mkdir /m2-repository
 
-chown -R build:build /home/build /m2-repository
+chown -R ${BUILD_USER}:${BUILD_USER} ${BUILD_USER_HOME} /m2-repository
 yum clean all
