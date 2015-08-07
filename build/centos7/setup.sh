@@ -17,5 +17,6 @@ javac -version
 
 adduser build
 mkdir /home/build/.m2
+mkdir /m2-repository
 cp /settings.xml /home/build/.m2
-chown -R build:build /home/build
+chown -R build:build /home/build /m2-repository
