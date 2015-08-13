@@ -11,7 +11,10 @@ echo "include_only=.garr.it,.cern.ch" >> /etc/yum/pluginconf.d/fastestmirror.con
 yum clean all
 yum install -y hostname epel-release
 yum -y update
-yum -y install which make createrepo wget rpm-build git tar java-1.7.0-openjdk-devel apache-maven
+yum -y install which make createrepo \
+  wget rpm-build git tar java-1.7.0-openjdk-devel apache-maven \
+  redhat-rpm-config buildsys-macros
+
 
 java -version
 javac -version
