@@ -114,7 +114,7 @@ ROBOT_OPTIONS="--variable vo1:$VO1 \
   --variable vo2_issuer:$VO2_ISSUER \
   --variable myproxy_server:$MYPROXY_SERVER \
   --variable myProxyPassPhrase:$MYPROXY_PASSWORD \
-  --pythonpath lib \
+  --pythonpath .:lib \
   -d reports "
 
 if [ -n "${INCLUDE_TESTS}" ]; then
