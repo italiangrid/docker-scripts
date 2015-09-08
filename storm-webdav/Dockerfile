@@ -7,6 +7,4 @@ RUN \
 ADD setup /
 RUN chmod 755 "/run.sh"
 
-ADD files/webdav/sa.d /etc/storm/webdav/sa.d
-
 CMD /run.sh

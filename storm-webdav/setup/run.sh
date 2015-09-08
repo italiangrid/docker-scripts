@@ -4,13 +4,13 @@
 CONFDIR=/etc/storm
 SITEINFODIR=$CONFDIR/siteinfo
 VODIR=$SITEINFODIR/vo.d
+SADIR=$CONFDIR/webdav/sa.d
 JARDIR=/usr/share/java/storm-webdav
 REPO="https://github.com/italiangrid/storm-deployment-test/raw/master"
 KEYDIR=/etc/grid-security
 SRVKEYDIR=$KEYDIR/storm-webdav
 
-STORM_FILE_LIST="storm-groups.conf storm-users.conf storm-wn-list.conf"
-VO_FILE_LIST="test.vo testers.eu-emi.eu"
+VO_FILE_LIST="test.vo"
 JVM_OPTS=""
 TARFILE="target/storm-webdav-server.tar.gz"
 
@@ -20,11 +20,7 @@ set -ex
 rm -f $JARDIR/*.jar
 
 ls -l /code
-
-# new code
 tar -C / -xvzf /code/$TARFILE
-
-ls -l /etc/storm/webdav/sa.d
 
 # setup
 if [ ! -d $KEYDIR/vomsdir ]; then
@@ -43,17 +39,17 @@ chown -R storm:storm $SRVKEYDIR
 puppet apply --modulepath=/ci-puppet-modules/modules/ /ci-puppet-modules/modules/puppet-test-vos/manifests/init.pp
 
 # get test configuration
+wget --quiet "https://github.com/italiangrid/docker-scripts/raw/master/storm-webdav/files/webdav/sa.d/test.vo.properties" -P $SADIR
+ls -l $SADIR
+
 if [ ! -d $VODIR ]; then
   mkdir -p $VODIR
 fi
 
-for file in $STORM_FILE_LIST; do
-  wget "$REPO/siteinfo/$file" -P $SITEINFODIR
-done
-
 for file in $VO_FILE_LIST; do
-  wget "$REPO/siteinfo/vo.d/$file" -P $VODIR
+  wget --quiet "$REPO/siteinfo/vo.d/$file" -P $VODIR
 done
+ls -l $VODIR
 
 # start service
 if [ -n "$ENABLE_JREBEL" ]; then
