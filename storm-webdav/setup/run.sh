@@ -11,6 +11,7 @@ KEYDIR=/etc/grid-security
 SRVKEYDIR=$KEYDIR/storm-webdav
 
 VO_FILE_LIST="test.vo"
+VO_LIST="test.vo"
 JVM_OPTS=""
 TARFILE="target/storm-webdav-server.tar.gz"
 
@@ -39,7 +40,7 @@ chown -R storm:storm $SRVKEYDIR
 puppet apply --modulepath=/ci-puppet-modules/modules/ /ci-puppet-modules/modules/puppet-test-vos/manifests/init.pp
 
 # get test configuration
-wget --quiet "https://github.com/italiangrid/docker-scripts/raw/master/storm-webdav/files/webdav/sa.d/test.vo.properties" -P $SADIR
+wget --quiet --no-clobber "https://github.com/italiangrid/docker-scripts/raw/master/storm-webdav/files/webdav/sa.d/test.vo.properties" -P $SADIR
 ls -l $SADIR
 
 if [ ! -d $VODIR ]; then
@@ -50,6 +51,15 @@ for file in $VO_FILE_LIST; do
   wget --quiet "$REPO/siteinfo/vo.d/$file" -P $VODIR
 done
 ls -l $VODIR
+
+for vo in $VO_LIST; do
+  if [ ! -d /storage/$vo ];then
+    mkdir /storage/$vo
+  fi
+  for n in $(seq 1 5); do
+    touch /storage/$vo/file$n
+  done
+done
 
 # start service
 if [ -n "$ENABLE_JREBEL" ]; then
