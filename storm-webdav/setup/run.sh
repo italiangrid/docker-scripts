@@ -53,7 +53,11 @@ ls -l $VODIR
 
 # start service
 if [ -n "$ENABLE_JREBEL" ]; then
-  JVM_OPTS="-javaagent:/jrebel/jrebel.jar -Drebel.stats=false -Drebel.usage_reporting=false -Drebel.struts2_plugin=true -Drebel.tiles2_plugin=true $JVM_OPTS"
+  JVM_OPTS="-javaagent:/opt/jrebel/jrebel.jar -Drebel.stats=false -Drebel.usage_reporting=false -Drebel.struts2_plugin=true -Drebel.tiles2_plugin=true $JVM_OPTS"
+  
+  chown -R storm.storm /home/storm
+  chmod 755 /home/storm/.jrebel
+  chmod 644 /home/storm/.jrebel/*
 fi
 
 if [ -z "$DEBUG_PORT" ]; then
