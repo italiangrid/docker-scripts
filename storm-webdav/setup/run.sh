@@ -24,10 +24,6 @@ ls -l /code
 tar -C / -xvzf /code/$TARFILE
 
 # setup
-if [ ! -d $KEYDIR/vomsdir ]; then
-  mkdir -p $KEYDIR/vomsdir
-fi
-
 fetch-crl
 
 if [ ! -d $SRVKEYDIR ]; then
@@ -37,15 +33,9 @@ fi
 cp $KEYDIR/hostcert.pem $KEYDIR/hostkey.pem $SRVKEYDIR/
 chown -R storm:storm $SRVKEYDIR
 
-puppet apply --modulepath=/ci-puppet-modules/modules/ /ci-puppet-modules/modules/puppet-test-vos/manifests/init.pp
-
 # get test configuration
 wget --quiet --no-clobber "https://github.com/italiangrid/docker-scripts/raw/master/storm-webdav/files/webdav/sa.d/test.vo.properties" -P $SADIR
 ls -l $SADIR
-
-if [ ! -d $VODIR ]; then
-  mkdir -p $VODIR
-fi
 
 for file in $VO_FILE_LIST; do
   wget --quiet "$REPO/siteinfo/vo.d/$file" -P $VODIR
@@ -53,18 +43,23 @@ done
 ls -l $VODIR
 
 for vo in $VO_LIST; do
-  if [ ! -d /storage/$vo ];then
-    mkdir /storage/$vo
+  TESTDIR=/storage/$vo/mix-webdav
+  if [ ! -d $TESTDIR ];then
+    mkdir -p $TESTDIR
   fi
   for n in $(seq 1 5); do
-    touch /storage/$vo/file$n
+    touch $TESTDIR/file$n
   done
 done
 
+chown -R storm:storm /storage
+
 # start service
 if [ -n "$ENABLE_JREBEL" ]; then
-  JVM_OPTS="-javaagent:/opt/jrebel/jrebel.jar -Drebel.stats=false -Drebel.usage_reporting=false -Drebel.struts2_plugin=true -Drebel.tiles2_plugin=true $JVM_OPTS"
+  JVM_OPTS="-javaagent:/opt/jrebel/jrebel.jar -Drebel.stats=false -Drebel.usage_reporting=false -Drebel.struts2_plugin=true -Drebel.tiles2_plugin=true -Drebel.license=/home/storm/.jrebel/jrebel.lic $JVM_OPTS"
   
+  mkdir -p /home/storm
+  cp -r /mnt/.jrebel /home/storm
   chown -R storm.storm /home/storm
   chmod 755 /home/storm/.jrebel
   chmod 644 /home/storm/.jrebel/*
