@@ -125,4 +125,4 @@ Example:
 
 Example of run with 1 process, 1 thread and 1 runs (as default) without console:
 
-	docker run -v /home/vianello/git/docker-scripts/grinder:/etc/storm/grinder italiangrid/grinder
+	docker run -v /home/vianello/git/docker-scripts/grinder:/etc/storm/grinder italiangrid/grinder:latest
