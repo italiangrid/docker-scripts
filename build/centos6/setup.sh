@@ -13,7 +13,10 @@ yum install -y hostname epel-release
 yum -y update
 yum -y install which make createrepo \
   wget rpm-build git tar java-1.8.0-openjdk-devel apache-maven \
-  redhat-rpm-config buildsys-macros
+  redhat-rpm-config
+
+# Align it with centos7 naming
+sed -i -e "s#^%dist .el6#%dist .el6.centos#" /etc/rpm/macros.dist
 
 # Setup JAVA 8 as default for maven
 echo 'JAVA_HOME=$JVM_ROOT/java-1.8.0' >> /etc/java/java.conf
