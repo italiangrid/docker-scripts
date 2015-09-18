@@ -9,6 +9,9 @@ TESTSUITE_SUITE="${TESTSUITE_SUITE:-tests}"
 
 echo 'export X509_USER_PROXY="/tmp/x509up_u$(id -u)"'>/etc/profile.d/x509_user_proxy.sh
 
+# Run fetch-crl
+fetch-crl
+
 MAX_RETRIES=600
 
 attempts=1
