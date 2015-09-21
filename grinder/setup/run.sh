@@ -53,6 +53,16 @@ env | grep "GRINDER"
 echo "Copy testsuite.properties file ..."
 cp $PROPFILE .
 
+export TESTSUITE_VONAME=$proxy_vo
+
+#write out current crontab
+crontab -l > mycron
+#echo new cron into cron file
+echo "*/10 * * * * /home/testers/checkproxy.sh" >> mycron
+#install new cron file
+crontab mycron
+rm mycron
+
 echo "Run load testsuite ..."
 ./bin/runAgent.sh testsuite.properties
 
