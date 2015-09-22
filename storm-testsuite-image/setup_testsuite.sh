@@ -3,6 +3,7 @@ set -x
 
 TESTSUITE="${TESTSUITE:-git://github.com/italiangrid/storm-testsuite.git}"
 STORM_BE_HOST="${STORM_BE_HOST:-docker-storm.cnaf.infn.it}"
+STORM_BE_SYNC_PORT="${STORM_BE_SYNC_PORT:-8444}"
 TESTSUITE_BRANCH="${TESTSUITE_BRANCH:-develop}"
 TESTSUITE_EXCLUDE="${TESTSUITE_EXCLUDE:-to-be-fixed}"
 TESTSUITE_SUITE="${TESTSUITE_SUITE:-tests}"
@@ -16,7 +17,7 @@ MAX_RETRIES=600
 
 attempts=1
 
-CMD="nc -z ${STORM_BE_HOST} 8444"
+CMD="nc -z ${STORM_BE_HOST} ${STORM_BE_SYNC_PORT}"
 
 echo "Waiting for StoRM services... "
 $CMD

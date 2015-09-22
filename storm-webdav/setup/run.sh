@@ -11,7 +11,7 @@ KEYDIR=/etc/grid-security
 SRVKEYDIR=$KEYDIR/storm-webdav
 
 VO_FILE_LIST="test.vo"
-VO_LIST="test.vo"
+VO_LIST="test.vo dteam igi nested noauth tape testers.eu-emi.eu test.vo.bis"
 JVM_OPTS=""
 TARFILE="target/storm-webdav-server.tar.gz"
 
@@ -34,7 +34,9 @@ cp $KEYDIR/hostcert.pem $KEYDIR/hostkey.pem $SRVKEYDIR/
 chown -R storm:storm $SRVKEYDIR
 
 # get test configuration
-wget --quiet --no-clobber "https://github.com/italiangrid/docker-scripts/raw/master/storm-webdav/files/webdav/sa.d/test.vo.properties" -P $SADIR
+for vo in $VO_LIST; do
+  wget --quiet --no-clobber "https://github.com/italiangrid/docker-scripts/raw/master/storm-webdav/files/webdav/sa.d/${vo}.properties" -P $SADIR
+done
 ls -l $SADIR
 
 for file in $VO_FILE_LIST; do

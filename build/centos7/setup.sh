@@ -11,8 +11,10 @@ echo "include_only=.garr.it,.cern.ch" >> /etc/yum/pluginconf.d/fastestmirror.con
 yum clean all
 yum install -y hostname epel-release
 yum -y update
-yum -y install make createrepo wget rpm-build git tar maven java-1.8.0-openjdk-devel \
-  redhat-rpm-config buildsys-macros
+yum -y install make createrepo \
+  wget rpm-build git tar maven java-1.8.0-openjdk-devel \
+  redhat-rpm-config buildsys-macros \
+  autoconf automake cmake gcc-c++ libtool
 
 # Setup JAVA 8 as default for maven
 echo 'JAVA_HOME=$JVM_ROOT/java-1.8.0' >> /etc/java/java.conf

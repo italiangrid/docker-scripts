@@ -1,0 +1,7 @@
+[GPFS] 
+name=GPFS
+baseurl=http://radiohead.cnaf.infn.it:9999/job/repo_gpfs//lastSuccessfulBuild/artifact/yum/
+protect=1
+enabled=1
+priority=1
+gpgcheck=0
