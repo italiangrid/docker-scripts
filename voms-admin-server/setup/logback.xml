@@ -5,6 +5,8 @@
   <logger name="org.glite.security.voms" level="${VOMS_LOG_LEVEL:-INFO}"/>
   <logger name="org.italiangrid" level="${VOMS_LOG_LEVEL:-INFO}"/>
   <logger name="it.infn" level="${VOMS_LOG_LEVEL:-INFO}"/>
+  <logger name="org.hibernate.SQL" level="${HIBERNATE_LOG_LEVEL:-WARN}"/>
+  <logger name="org.hibernate.type" level="${HIBERNATE_LOG_LEVEL:-WARN}"/>
 
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>

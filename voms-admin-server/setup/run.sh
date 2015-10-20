@@ -1,31 +1,11 @@
 #!/bin/bash
 set -ex
 
-chown voms:voms /home/voms
-usermod -m -d /home/voms voms
-
-cp /tnsnames.ora /home/voms
-chown voms:voms /home/voms/tnsnames.ora
-
-ls -l /code
-
-old_jars=$(ls /var/lib/voms-admin/lib/ | grep -v ojdbc6.jar)
-rm -f $old_jars
-
-tar -C / -xvzf /code/voms-admin-server/target/voms-admin-server.tar.gz
-
-chown -R voms:voms /var/lib/voms-admin/work /var/log/voms-admin
-cp /etc/grid-security/hostcert.pem  /etc/grid-security/vomscert.pem
-cp /etc/grid-security/hostkey.pem  /etc/grid-security/vomskey.pem
-chown voms:voms /etc/grid-security/voms*.pem
-
-sed -i -e "s#localhost#dev.local.io#g" /etc/voms-admin/voms-admin-server.properties
-
-# Do this or voms-admin webapp will fail silently and always return 503
-mkdir /etc/grid-security/vomsdir
+## Wait for database server to be up
 
 if [ -z "$DB_PORT_3306_TCP_ADDR" ]; then
-  echo "This container requires a linked container hosting the VOMS MySQL database. The container alias must be called 'db'"
+  echo "This container requires a linked container hosting the VOMS MySQL " \
+    "database. The container alias must be 'db'"
   exit 1
 fi
 
@@ -41,7 +21,58 @@ do
   sleep 1
 done
 
-echo 'ok'
+echo 'Database server is up.'
+
+# Install requested voms-admin-server version
+if [[ -n "${VOMS_ADMIN_SERVER_VERSION}" ]]; then
+  yum install -y voms-admin-server-${VOMS_ADMIN_SERVER_VERSION}
+else
+  yum install -y voms-admin-server
+fi
+
+# Install requested voms-admin client
+if [[ -n "${VOMS_ADMIN_CLIENT_VERSION}" ]]; then
+  yum install -y voms-admin-client-${VOMS_ADMIN_CLIENT_VERSION}
+else
+  yum install -y voms-admin-client
+fi
+
+## Setup VOMS home for easier jrebel configuration
+chown voms:voms /home/voms
+usermod -m -d /home/voms voms
+
+cp /tnsnames.ora /home/voms
+chown voms:voms /home/voms/tnsnames.ora
+
+## Setup certificates
+cp /etc/grid-security/hostcert.pem  /etc/grid-security/vomscert.pem
+cp /etc/grid-security/hostkey.pem  /etc/grid-security/vomskey.pem
+chown voms:voms /etc/grid-security/voms*.pem
+
+# Do this or voms-admin webapp will fail silently and always return 503
+mkdir /etc/grid-security/vomsdir
+
+## Preconfigure using existing package, if requested
+if [[ -n "${VOMS_PRE_CONFIGURE}" ]]; then
+  echo "Running preconfiguration..."
+  CONFIGURE_VO_OPTIONS=${VOMS_PRE_CONFIGURE_OPTIONS} /bin/bash configure-vo.sh
+fi
+
+## Install new code
+ls -l /code
+
+old_jars=$(ls /var/lib/voms-admin/lib/ | grep -v ojdbc6.jar)
+rm -f $old_jars
+
+tar -C / -xvzf /code/voms-admin-server/target/voms-admin-server.tar.gz
+
+chown -R voms:voms /var/lib/voms-admin/work /var/log/voms-admin
+
+if [[ -n "$VOMS_UPGRADE_DB" ]]; then
+  echo "Running database upgrade..."
+  /bin/bash upgrade-db.sh
+fi
+
 
 skip_configuration=false
 
@@ -51,22 +82,12 @@ skip_configuration=false
 ## But only if configuration for the VO exists
 [ ! -e "/etc/voms-admin/test/service.properties" ] && skip_configuration=false
 
-if [ "$skip_configuration" = false ]; then
-  voms-configure install \
-    --vo test \
-    --dbtype mysql \
-    --skip-voms-core \
-    --deploy-database \
-    --dbname $VOMS_DB_NAME \
-    --dbusername $VOMS_DB_USERNAME \
-    --dbpassword $VOMS_DB_PASSWORD \
-    --dbhost db \
-    --mail-from $VOMS_MAIL_FROM \
-    --smtp-host mail \
-    --membership-check-period 60
+if [[ "$skip_configuration" = "false" ]]; then
+    echo "Running configuration..."
+    CONFIGURE_VO_OPTIONS=${VOMS_CONFIGURE_OPTIONS} /bin/bash configure-vo.sh
 fi
 
-# Setup loggin so that everything goes to stdout
+# Setup logging so that everything goes to stdout
 cp /logback.xml /etc/voms-admin/voms-admin-server.logback
 cp /logback.xml /etc/voms-admin/test/logback.xml
 chown voms:voms /etc/voms-admin/voms-admin-server.logback /etc/voms-admin/test/logback.xml
@@ -115,9 +136,16 @@ TNS_ADMIN=${TNS_ADMIN:-/home/voms}
 
 ORACLE_ENV="LD_LIBRARY_PATH=$ORACLE_LIBRARY_PATH TNS_ADMIN=$TNS_ADMIN"
 
+if [ -z "$VOMS_SKIP_JAVA_SETUP" ]; then
+  sh setup-java.sh
+fi
+
 java -version
 ## Add test0 admin
-voms-db-util add-admin --vo test --cert /usr/share/igi-test-ca/test0.cert.pem || echo "Error creating test0 admin. Does it already exist?"
+voms-db-util add-admin --vo test \
+  --cert /usr/share/igi-test-ca/test0.cert.pem \
+  || echo "Error creating test0 admin. Does it already exist?"
 
 # Start service
-su voms -s /bin/bash -c "$ORACLE_ENV java $VOMS_JAVA_OPTS -jar /usr/share/java/voms-container.jar $VOMS_ARGS"
+su voms -s /bin/bash -c "$ORACLE_ENV java $VOMS_JAVA_OPTS \
+  -jar /usr/share/java/voms-container.jar $VOMS_ARGS"
