@@ -26,6 +26,8 @@ if [ $? != 0 ]; then
   exit 1
 fi
 
+pip install --upgrade robotframework-httplibrary
+
 # install clients
 yum install -y voms-clients3 myproxy
 
