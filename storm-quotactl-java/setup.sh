@@ -18,34 +18,49 @@ fi
 # install quota and xfsprogs
 yum install -y quota xfsprogs
 
-# run fetch-crl
-fetch-crl
-
 # check if errors occurred after fetch-crl execution
 if [ $? != 0 ]; then
   exit 1
 fi
 
 # enable quota on filesystem
+echo "This is the /etc/fstab file content ..."
 cat /etc/fstab
 
-line = `grep -n swap /etc/fstab | cut -d : -f 1`
-replaced_line = "/dev/mapper/vg_vol01-lv_root / ext4 defaults,grpjquota=aquota.group,jqfmt=vfsv0 1 1"
-sed -i '$lines/.*/$replaced_line/' /etc/fstab
+echo "Remove fstab file ..."
+rm -f /etc/fstab
 
-mount -o remount /
+cat > /etc/fstab << EOF
+LABEL=_/   /        ext4      defaults,grpjquota=aquota.group,jqfmt=vfsv0         0 0
+devpts     /dev/pts  devpts  gid=5,mode=620   0 0
+tmpfs      /dev/shm  tmpfs   defaults         0 0
+proc       /proc     proc    defaults         0 0
+sysfs      /sys      sysfs   defaults         0 0
+EOF
 
-quotacheck -avugm
+echo "This is the new /etc/fstab file content ..."
+cat /etc/fstab
 
-ls /aquota.group
+id
 
-quotaon -avug
+whoami
+
+#ls -l /etc/smb_credentials.txt 
+
+#sudo mount -v -o remount /
+
+#quotacheck -avugm
+
+#ls /aquota.group
+
+#quotaon -avug
 
 groupadd test.vo
+useradd storm
 
 chmod +x /run_tests.sh
 
 mkdir /storage
 mkdir /storage/test.vo
 chown -R storm:test.vo /storage/test.vo
-chmod 750 /storage/test,vo
+chmod 750 /storage/test.vo
