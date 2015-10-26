@@ -61,7 +61,7 @@ fi
 ## Install new code
 ls -l /code
 
-old_jars=$(ls /var/lib/voms-admin/lib/ | grep -v ojdbc6.jar)
+old_jars=$(ls /var/lib/voms-admin/lib/)
 rm -f $old_jars
 
 tar -C / -xvzf /code/voms-admin-server/target/voms-admin-server.tar.gz
@@ -131,7 +131,10 @@ if [ -n "$ENABLE_JMX" ]; then
   VOMS_JAVA_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=6002 -Dcom.sun.management.jmxremote.rmi.port=6002 -Djava.rmi.server.hostname=dev.local.io -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false $VOMS_JAVA_OPTS"
 fi
 
+VOMS_JAR=${VOMS_JAR:-/usr/share/java/voms-container.jar}
+VOMS_MAIN_CLASS=${VOMS_MAIN_CLASS:-org.italiangrid.voms.container.Container}
 ORACLE_LIBRARY_PATH=${ORACLE_LIBRARY_PATH:-/usr/lib64/oracle/11.2.0.3.0/client/lib64}
+OJDBC_JAR=${OJDBC_JAR:-${ORACLE_LIBRARY_PATH}/ojdbc6.jar}
 TNS_ADMIN=${TNS_ADMIN:-/home/voms}
 
 ORACLE_ENV="LD_LIBRARY_PATH=$ORACLE_LIBRARY_PATH TNS_ADMIN=$TNS_ADMIN"
@@ -147,5 +150,4 @@ voms-db-util add-admin --vo test \
   || echo "Error creating test0 admin. Does it already exist?"
 
 # Start service
-su voms -s /bin/bash -c "$ORACLE_ENV java $VOMS_JAVA_OPTS \
-  -jar /usr/share/java/voms-container.jar $VOMS_ARGS"
+su voms -s /bin/bash -c "$ORACLE_ENV java $VOMS_JAVA_OPTS -cp $VOMS_JAR:$OJDBC_JAR $VOMS_MAIN_CLASS $VOMS_ARGS"
