@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t italiangrid/build-centos5 .
+docker build --rm -t italiangrid/build-centos5 .
