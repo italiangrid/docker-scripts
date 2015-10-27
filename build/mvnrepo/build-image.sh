@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t italiangrid/build-mvnrepo .
+docker build --rm -t italiangrid/build-mvnrepo .

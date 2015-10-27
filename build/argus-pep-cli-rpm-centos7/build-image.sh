@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t italiangrid/build-argus-pep-cli-rpm-centos7 .
+docker build --rm -t italiangrid/build-argus-pep-cli-rpm-centos7 .
