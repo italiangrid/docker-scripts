@@ -1,0 +1,21 @@
+FROM ubuntu
+
+RUN apt-get update && apt-get install -y \
+      ack-grep \
+      cmake \
+      curl \
+      wget \
+      g++ \
+      git \
+      make \
+      man-db \
+      ncurses-dev \
+      procps \
+      python-dev \
+      python-pip \
+      sudo \
+      tmux \
+      unzip \
+      vim \
+      xz-utils \
+      && rm -rf /var/lib/apt/lists/*
