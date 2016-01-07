@@ -1,8 +1,8 @@
 FROM  centos:7
 
-add setup.sh settings.xml /
-run chmod +x /setup.sh
-run /setup.sh
-ADD gpfs.repo /etc/yum.repos.d/
+ADD apache-maven.repo gpfs.repo /etc/yum.repos.d/
+ADD setup.sh settings.xml /
+RUN chmod +x /setup.sh
+RUN /setup.sh
 
 VOLUME /m2-repository

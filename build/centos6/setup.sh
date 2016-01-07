@@ -14,22 +14,23 @@ yum -y update
 yum -y install which make createrepo \
   wget rpm-build git tar java-1.8.0-openjdk-devel apache-maven \
   redhat-rpm-config \
-  autoconf automake cmake gcc-c++ libtool
+  autoconf automake cmake gcc-c++ libtool sudo
 
 # Align it with centos7 naming
 sed -i -e "s#^%dist .el6#%dist .el6.centos#" /etc/rpm/macros.dist
 
-# Setup JAVA 8 as default for maven
-echo 'JAVA_HOME=$JVM_ROOT/java-1.8.0' >> /etc/java/java.conf
-echo 2 | alternatives --config java
-echo 2 | alternatives --config javac
-echo
+update-alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java
+update-alternatives --set javac /usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin/javac
 
 java -version
 javac -version
 mvn --version
 
+# Add build user to the sudoers
+echo '%wheel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 adduser --uid ${BUILD_USER_UID} ${BUILD_USER}
+usermod -a -G wheel ${BUILD_USER}
+
 mkdir ${BUILD_USER_HOME}/.m2
 cp /settings.xml ${BUILD_USER_HOME}/.m2
 mkdir /m2-repository

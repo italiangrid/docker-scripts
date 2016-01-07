@@ -12,24 +12,22 @@ yum clean all
 yum install -y hostname epel-release
 yum -y update
 yum -y install make createrepo \
-  wget rpm-build git tar maven java-1.8.0-openjdk-devel \
+  which wget rpm-build git tar apache-maven java-1.8.0-openjdk-devel \
   redhat-rpm-config buildsys-macros \
-  autoconf automake cmake gcc-c++ libtool
-
-# Setup JAVA 8 as default for maven
-echo 'JAVA_HOME=$JVM_ROOT/java-1.8.0' >> /etc/java/java.conf
-
-# Couldn't find a better way to tell alternatives in a *programmatic* way 'always use the latest java 8'
-# but this depends on the order of installation of the rpms, so it's really unreliable
-echo 1 | alternatives --config java
-echo 2 | alternatives --config javac
-echo
+  autoconf automake cmake gcc-c++ libtool sudo
 
 java -version
 javac -version
 mvn --version
 
+update-alternatives --set java $(realpath /usr/lib/jvm/java-1.8.0-openjdk/jre/bin/java)
+update-alternatives --set javac $(realpath /usr/lib/jvm/java-1.8.0-openjdk/bin/javac)
+
+# Add build user to the sudoers
+echo '%wheel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 adduser --uid ${BUILD_USER_UID} ${BUILD_USER}
+usermod -a -G wheel ${BUILD_USER}
+
 mkdir ${BUILD_USER_HOME}/.m2
 cp /settings.xml ${BUILD_USER_HOME}/.m2
 mkdir /m2-repository
