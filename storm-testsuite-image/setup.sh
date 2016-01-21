@@ -16,7 +16,7 @@ if [[ ( $? -eq 4 ) || ( $? -eq 6 ) ]]; then
 fi
 
 # install utilities
-yum install -y fetch-crl nc
+yum install -y perl-libwww-perl.noarch fetch-crl nc
 
 # run fetch-crl
 fetch-crl
