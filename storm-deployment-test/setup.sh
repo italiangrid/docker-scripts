@@ -16,7 +16,7 @@ if [[ ( $? -eq 4 ) || ( $? -eq 6 ) ]]; then
 fi
 
 # install acl and extended attributes support
-yum install -y attr acl fetch-crl
+yum install -y attr acl perl-libwww-perl.noarch fetch-crl
 
 # run fetch-crl
 fetch-crl
