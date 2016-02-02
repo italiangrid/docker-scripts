@@ -15,8 +15,11 @@ if [[ ( $? -eq 4 ) || ( $? -eq 6 ) ]]; then
   exit 1
 fi
 
+# Added missing package to avoid fetch-crl packaging bug
+yum install -y perl-libwww-perl.noarch
+
 # install utilities
-yum install -y perl-libwww-perl.noarch fetch-crl nc
+yum install -y fetch-crl nc
 
 # run fetch-crl
 fetch-crl
