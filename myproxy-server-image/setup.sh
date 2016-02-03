@@ -29,8 +29,12 @@ chown myproxy:myproxy /etc/grid-security/myproxy/*
 chmod 400 /etc/grid-security/myproxy/hostkey.pem 
 chmod 644 /etc/grid-security/myproxy/hostcert.pem 
 
-# install acl and extended attributes support
 yum install -y fetch-crl
+
+## This is due do a bug in fetch-crl package, that does
+## not provide PERL::LWP. Remove the line below when
+## this is fixed
+yum install -y perl-libwww-perl
 
 # run fetch-crl
 fetch-crl
