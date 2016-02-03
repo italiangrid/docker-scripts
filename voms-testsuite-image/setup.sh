@@ -91,6 +91,11 @@ fi
 
 yum -y install voms-clients3 myproxy
 
+## This is due do a bug in fetch-crl package, that does
+## not provide PERL::LWP. Remove the line below when
+## this is fixed
+yum install -y perl-libwww-perl
+
 ## Setup vomses file for the two test VOs
 sync
 make_vomses ${VO1} ${VO1_HOST} ${VO1_PORT} ${VO1_ISSUER}
