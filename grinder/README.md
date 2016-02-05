@@ -25,10 +25,16 @@ Testsuite properties tells Docker from where to download the sources and which b
 
 Authorization properties are useful to create the necessary VOMS proxy to access the desired storage area.
 
+Set these properties:
+
 |Name|Description|Default|
 |:--|:--|:--|
 |**proxy.voname** | VO name used to create the used VOMS proxy credentials | *test.vo*
 |**proxy.user** | IGI test CA user to use | *test0*
+
+or provide a valid proxy file by mounting it as `/certs/proxy` :
+
+	-v /local/path/to/proxy:/certs/proxy
 
 ### 1.1.3 Execution properties
 
@@ -121,8 +127,12 @@ It's mandatory to add a volume that links the directory where your testsuite.pro
 
 Example:
 
-	-v /home/vianello/git/docker-scripts/grinder:/etc/storm/grinder
+	-v /local/path/to/conf/dir:/etc/storm/grinder
 
-Example of run with 1 process, 1 thread and 1 runs (as default) without console:
+Example of run with 1 process, 1 thread and 1 runs (as default) without console and using auto-generated test proxy:
 
-	docker run -v /home/vianello/git/docker-scripts/grinder:/etc/storm/grinder italiangrid/grinder:latest
+	docker run -v /local/path/to/conf/dir:/etc/storm/grinder italiangrid/grinder:latest
+	
+Example of use with a provided proxy:
+
+	docker run -v /local/path/to/conf/dir:/etc/storm/grinder -v /local/path/to/proxy:/certs/proxy italiangrid/grinder:latest
