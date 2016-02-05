@@ -3,6 +3,8 @@
 CERT_DIR="/usr/share/igi-test-ca"
 PROPFILE="/etc/storm/grinder/testsuite.properties"
 
+PROXYFILE="/certs/proxy"
+
 get_prop() {
 
     value=$(grep "$1" $PROPFILE | awk -F'[=&]' '{print $2}' | sed -e "s/^[ \t]*//")
@@ -11,17 +13,27 @@ get_prop() {
 
 # proxy
 
-proxy_vo=$(get_prop "proxy.voname")
-proxy_user=$(get_prop "proxy.user")
+if [ -f  $PROXYFILE ];
+then
+  echo "Proxy file found in $PROXYFILE ..."
+  echo "Changing X509_USER_PROXY value to $PROXYFILE ..."
+  export X509_USER_PROXY=$PROXYFILE
+  echo "X509_USER_PROXY=$PROXYFILE"
+  export ENABLE_CHECKPROXY=false
+else
+  proxy_vo=$(get_prop "proxy.voname")
+  proxy_user=$(get_prop "proxy.user")
 
-echo "Copy user certificate and key to globus directory ..."
-cp $CERT_DIR/$proxy_user.cert.pem /home/tester/.globus/usercert.pem
-chmod 644 /home/tester/.globus/usercert.pem
-cp $CERT_DIR/$proxy_user.key.pem /home/tester/.globus/userkey.pem
-chmod 400 /home/tester/.globus/userkey.pem
+  echo "Copy user certificate and key to globus directory ..."
+  cp $CERT_DIR/$proxy_user.cert.pem /home/tester/.globus/usercert.pem
+  chmod 644 /home/tester/.globus/usercert.pem
+  cp $CERT_DIR/$proxy_user.key.pem /home/tester/.globus/userkey.pem
+  chmod 400 /home/tester/.globus/userkey.pem
 
-echo "Create VOMS proxy for $proxy_vo VO and user $proxy_user ..."
-echo pass|voms-proxy-init -pwstdin --voms $proxy_vo
+  echo "Create VOMS proxy for $proxy_vo VO and user $proxy_user ..."
+  echo pass|voms-proxy-init -pwstdin --voms $proxy_vo
+  export ENABLE_CHECKPROXY=true
+fi
 
 # testsuite
 
@@ -62,7 +74,8 @@ echo "*/10 * * * * /home/testers/checkproxy.sh" >> mycron
 #install new cron file
 crontab mycron
 rm mycron
+#write out current crontab
+crontab -l > mycron
 
 echo "Run load testsuite ..."
 ./bin/runAgent.sh testsuite.properties
-
