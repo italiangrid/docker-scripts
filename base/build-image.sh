@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t italiangrid/base .
+docker build --rm --no-cache -t italiangrid/base .
