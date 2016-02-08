@@ -108,6 +108,19 @@ In case of mixed WebDAV tests, these are the customizations available.
 |:--|:--|:--|
 |**mixdav.test\_directory** | Remote test working directory name | *mix-webdav*
 
+### 1.1.10 Atlas-nested properties
+
+In case of Atlas-nested tests, these are the customizations available.
+
+|Name|Description|Default|
+|:--|:--|:--|
+|**atlas_nested.nesting_levels**| Number of nested directories parent of the test file(s) | 256
+|**atlas_nested.file_size_in_bytes**| Size of the uploaded test file(s) in bytes | 10000
+|**atlas_nested.test_directory** | Remote test working directory name | *atlas_test*
+|**atlas_nested.transfer_protocol**| HTTP protocol used to connect to dav endpoints | https
+|**atlas_nested.sleep_threshold**| Number of max attempts of status requests | 50
+|**atlas_nested.sleep_time**| sec to wait between status requests | .5
+
 
 ## 2. Run testsuite
 
