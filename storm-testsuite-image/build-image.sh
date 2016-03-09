@@ -1,4 +1,7 @@
 #!/bin/bash
 
-docker pull italiangrid/base:centos6
+if [ -n "${DOCKER_REGISTRY_HOST}" ]; then
+  docker pull ${DOCKER_REGISTRY_HOST}/italiangrid/base:centos6
+fi
+
 docker build -t italiangrid/storm-testsuite .
