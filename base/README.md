@@ -1,12 +1,11 @@
-Centos6 puppet image
-==============
+Centos5 and Centos6 puppet image
+================================
 
+## Build image
 
-A docker Centos6 image ready for puppet provisioning.
+    sh build-images
 
+## Push images
 
-## Build the puppet-based image
-
-    docker pull centos:centos6
-    docker build --no-cache -t centos6/puppetbase:1.0 .
-
+    export DOCKER_REGISTRY_HOST=cloud-vm128.cloud.cnaf.infn.it
+    sh push-images.sh

@@ -1,4 +1,4 @@
-FROM italiangrid/base
+FROM italiangrid/base:centos6
 
 add manifest.pp /
 
