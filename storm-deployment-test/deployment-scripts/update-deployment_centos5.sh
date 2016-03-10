@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 fix_yaim () {
   # avoid starting frontend server
   sed -i -e '/\/sbin\/service storm-frontend-server start/c\\#\/sbin\/service storm-frontend-server start' /opt/glite/yaim/functions/local/config_storm_frontend
@@ -9,6 +10,7 @@ fix_yaim () {
   echo "return 0">> /opt/glite/yaim/functions/local/config_ntp
   echo "}">> /opt/glite/yaim/functions/local/config_ntp
 }
+
 
 # This script execute a clean deployment of StoRM
 WGET_OPTIONS="--no-check-certificate"
@@ -23,12 +25,14 @@ STORM_REPO=${STORM_REPO:-http://radiohead.cnaf.infn.it:9999/view/REPOS/job/repo_
 wget $WGET_OPTIONS  http://emisoft.web.cern.ch/emisoft/dist/EMI/3/sl5/x86_64/base/emi-release-3.0.0-2.el5.noarch.rpm
 yum localinstall --nogpgcheck -y emi-release-3.0.0-2.el5.noarch.rpm
 
+# add some users
+adduser -r storm
+
 # install
 yum clean all
 yum install -y emi-storm-backend-mp emi-storm-frontend-mp emi-storm-globus-gridftp-mp emi-storm-gridhttps-mp
 
-# add some users
-adduser -r storm
+fix_yaim
 
 # install yaim configuration
 sh ./install-yaim-configuration.sh
