@@ -3,8 +3,8 @@
 
 fix_yaim () {
   # avoid starting frontend server
-  sed -i -e '/\/sbin\/service storm-frontend-server start/c\\#\/sbin\/service storm-frontend-server start' /opt/glite/yaim/functions/local/config_storm_frontend        
-  
+  sed -i -e '/\/sbin\/service storm-frontend-server start/c\\#\/sbin\/service storm-frontend-server start' /opt/glite/yaim/functions/local/config_storm_frontend
+
   # avoid ntp check
   echo "config_ntp () {"> /opt/glite/yaim/functions/local/config_ntp
   echo "return 0">> /opt/glite/yaim/functions/local/config_ntp
@@ -44,7 +44,7 @@ sed -i 's/sleep 20/sleep 30/' /etc/init.d/storm-backend-server
 sed -i 's/sleep 2/sleep 5/' /etc/init.d/bdii
 
 # do yaim
-/opt/glite/yaim/bin/yaim -c -d 6 -s /etc/storm/siteinfo/storm.def -n se_storm_backend -n se_storm_frontend -n se_storm_gridftp -n se_storm_webdav
+/opt/glite/yaim/bin/yaim -c -s /etc/storm/siteinfo/storm.def -n se_storm_backend -n se_storm_frontend -n se_storm_gridftp -n se_storm_webdav
 
 # install the storm repo
 wget $WGET_OPTIONS  $STORM_REPO -O /etc/yum.repos.d/storm.repo
@@ -70,4 +70,4 @@ sed -i 's/sleep 2/sleep 5/' /etc/init.d/bdii
 sh ./post-config-setup.sh
 
 # do yaim
-/opt/glite/yaim/bin/yaim -c -d 6 -s /etc/storm/siteinfo/storm.def -n se_storm_backend -n se_storm_frontend -n se_storm_gridftp -n se_storm_webdav
+/opt/glite/yaim/bin/yaim -c -s /etc/storm/siteinfo/storm.def -n se_storm_backend -n se_storm_frontend -n se_storm_gridftp -n se_storm_webdav

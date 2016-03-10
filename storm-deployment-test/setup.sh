@@ -19,7 +19,7 @@ fi
 yum install -y perl-libwww-perl.noarch
 
 # install acl and extended attributes support
-yum install -y attr acl ntp fetch-crl
+yum install -y attr acl fetch-crl
 
 # run fetch-crl
 fetch-crl
