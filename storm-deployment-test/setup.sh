@@ -3,7 +3,7 @@
 #install the list of puppet modules after downloading from github
 git clone git://github.com/cnaf/ci-puppet-modules.git /ci-puppet-modules
 
-# install all puppet modules required by the StoRM testsuite. 
+# install all puppet modules required by the StoRM testsuite.
 # the "--detailed-exitcodes" flag returns explicit exit status:
 # exit code '2' means there were changes
 # exit code '4' means there were failures during the transaction
@@ -19,7 +19,7 @@ fi
 yum install -y perl-libwww-perl.noarch
 
 # install acl and extended attributes support
-yum install -y attr acl fetch-crl
+yum install -y attr acl ntp fetch-crl
 
 # run fetch-crl
 fetch-crl
@@ -28,4 +28,3 @@ fetch-crl
 if [ $? != 0 ]; then
   exit 1
 fi
-
