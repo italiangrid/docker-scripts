@@ -5,7 +5,7 @@ RUN yum update -y &&\
 	yum install -y iproute wget curl git
 
 ## Layer: Java
-RUN yum install -y java-1.8.0-openjdk maven
+RUN yum install -y java-1.8.0-openjdk-devel maven
 
 ## Layer: Jenkins
 RUN useradd -m -d /home/jenkins -s /bin/sh jenkins &&\
