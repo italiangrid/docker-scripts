@@ -7,4 +7,4 @@ RUN chmod +x /run.sh
 
 RUN cp /*.crt /usr/local/share/ca-certificates/ && /usr/sbin/update-ca-certificates
 
-ENTRYPOINT  /run.sh
+CMD /run.sh

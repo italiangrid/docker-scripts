@@ -3,7 +3,6 @@ set -x
 
 GGUS_REPO=${GGUS_REPO:-https://github.com/andreaceccanti/emi-ggus-mon.git}
 GGUS_REPO_BRANCH=${GGUS_REPO_BRANCH:-master}
-REPORT_URL=${REPORT_URL:-http://radiohead.cnaf.infn.it:10000/ggus-reports}
 REPORT_DIR=${REPORT_DIR:-/reports}
 
 ## checkout ggus repo
@@ -19,9 +18,6 @@ ls /usr/src/app
 ls /usr/src/app/assets
 cp -r /usr/src/app/assets/* ${REPORT_DIR}
 
-ggus.py cnaf                  \
-  --skip_notification         \
-  --target_dir=${REPORT_DIR}  \
-  --report_url=${REPORT_URL}
+cnaf.py --target_dir=${REPORT_DIR} 
 
 ls /reports
