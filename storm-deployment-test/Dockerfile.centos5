@@ -1,8 +1,8 @@
-FROM italiangrid/base
+FROM italiangrid/base:centos5
 
 ADD . /
 
-run chmod +x /setup.sh 
+run chmod +x /setup.sh
 run /setup.sh
 
 # expose StoRM ports
@@ -13,4 +13,3 @@ run chmod +x /deploy.sh
 
 # setup StoRM daemons
 run chmod -R +x /daemons
-

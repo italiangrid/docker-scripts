@@ -2,7 +2,7 @@
 set -x
 
 MODE="${MODE:-clean}"
-PLATFORM="${PLATFORM:-SL6}"
+PLATFORM="${PLATFORM:-centos6}"
 STORM_REPO=${STORM_REPO:-http://radiohead.cnaf.infn.it:9999/view/REPOS/job/repo_storm_develop_SL6/lastSuccessfulBuild/artifact/storm_develop_sl6.repo}
 
 DEPLOYMENT_SCRIPT="$MODE-deployment_$PLATFORM.sh"

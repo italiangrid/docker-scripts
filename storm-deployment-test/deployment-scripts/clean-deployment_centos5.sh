@@ -23,11 +23,22 @@ adduser -r storm
 # install storm packages
 yum install -y --enablerepo=centosplus emi-storm-backend-mp emi-storm-frontend-mp emi-storm-globus-gridftp-mp emi-storm-gridhttps-mp
 
+# avoid starting frontend server
+sed -i -e '/\/sbin\/service storm-frontend-server start/c\\#\/sbin\/service storm-frontend-server start' /opt/glite/yaim/functions/local/config_storm_frontend
+
 # avoid ntp check
-echo "config_ntp () {"> /opt/glite/yaim/functions/local/config_ntp\necho "return 0">> /opt/glite/yaim/functions/local/config_ntp\necho "}">> /opt/glite/yaim/functions/local/config_ntp
+echo "config_ntp () {"> /opt/glite/yaim/functions/local/config_ntp
+echo "return 0">> /opt/glite/yaim/functions/local/config_ntp
+echo "}">> /opt/glite/yaim/functions/local/config_ntp
 
 # install yaim configuration
 sh ./install-yaim-configuration.sh
+
+# Sleep more avoid issues on docker
+sed -i 's/sleep 20/sleep 30/' /etc/init.d/storm-backend-server
+
+# Sleep more in bdii init script to avoid issues on docker
+sed -i 's/sleep 2/sleep 20/' /etc/init.d/bdii
 
 # configure with yaim
 /opt/glite/yaim/bin/yaim -c -s /etc/storm/siteinfo/storm.def -n se_storm_backend -n se_storm_frontend -n se_storm_gridftp -n se_storm_gridhttps

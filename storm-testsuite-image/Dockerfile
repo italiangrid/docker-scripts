@@ -1,8 +1,8 @@
-FROM italiangrid/base
+FROM italiangrid/base:centos6
 
 # add and run setup
 ADD . /
-RUN chmod +x /setup.sh 
+RUN chmod +x /setup.sh
 RUN /setup.sh
 
 # setup for the tester user

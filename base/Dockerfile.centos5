@@ -1,0 +1,11 @@
+FROM    centos:centos5
+
+run \
+  rpm --import http://mirror.centos.org/centos/5/os/x86_64/RPM-GPG-KEY-CentOS-5 && \
+  rpm -Uvh http://dl.fedoraproject.org/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm && \
+  yum clean all && \
+  yum -y update && \
+  yum --enablerepo=centosplus install -y puppet redhat-lsb wget git tar && \
+  puppet module install --force maestrodev-wget && \
+  puppet module install --force gini-archive && \
+  puppet module install --force puppetlabs-stdlib
