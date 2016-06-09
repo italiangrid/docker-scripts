@@ -7,10 +7,7 @@ RUN yum update -y &&\
 ## Layer: Java
 RUN yum install -y java-1.8.0-openjdk-devel maven
 
-## Layer: Jenkins
-RUN useradd -m -d /home/jenkins -s /bin/sh jenkins &&\
-    echo "jenkins:jenkins" | chpasswd
-
+COPY files/settings.xml /settings.xml
 COPY files/setup.sh /setup.sh
 COPY files/authorized_keys /authorized_keys
 COPY files/docker.repo /etc/yum.repos.d/docker.repo

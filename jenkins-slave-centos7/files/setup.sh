@@ -19,10 +19,19 @@ curl -L https://github.com/docker/compose/releases/download/1.7.0/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
 ## Change Jenkins UID to be compatible with UID in build images
-usermod -u ${JENKINS_UID} jenkins
+useradd -m -d /home/jenkins -s /bin/bash -u ${JENKINS_UID} jenkins
 
-## Fix ownership
-find /home -user 1000 -exec chown -h jenkins {} \;
+## Install cnaf nexus mirror settings
+mkdir ~jenkins/.m2
+mv /settings.xml ~jenkins/.m2
+chown -R jenkins:jenkins ~jenkins ~jenkins/.m2
+
+## Setup jenkins private key
+mkdir /home/jenkins/.ssh
+cp /authorized_keys /home/jenkins/.ssh
+chown -R jenkins:jenkins /home/jenkins/.ssh
+chmod 400 /home/jenkins/.ssh/authorized_keys
+chmod 700 /home/jenkins/.ssh
 
 ## Change docker GID so that it plays nicely with coreos hypervisor
 groupmod -g ${DOCKER_GID} docker
@@ -35,10 +44,3 @@ curl https://raw.githubusercontent.com/andreaceccanti/test-ca/master/igi-test-ca
 
 ## Rehash certificates
 update-ca-trust
-
-## Setup jenkins private key
-mkdir /home/jenkins/.ssh
-cp /authorized_keys /home/jenkins/.ssh
-chown -R jenkins:jenkins /home/jenkins/.ssh
-chmod 400 /home/jenkins/.ssh/authorized_keys
-chmod 700 /home/jenkins/.ssh
