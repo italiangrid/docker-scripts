@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#install git and puppet
+yum install -y git puppet
+
 #install the list of puppet modules after downloading from github
 git clone git://github.com/cnaf/ci-puppet-modules.git /ci-puppet-modules
 
