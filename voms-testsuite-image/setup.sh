@@ -89,12 +89,9 @@ else
   fi
 fi
 
-yum -y install voms-clients3 myproxy
-
-## This is due do a bug in fetch-crl package, that does
-## not provide PERL::LWP. Remove the line below when
-## this is fixed
-yum install -y perl-libwww-perl
+if [ -n "${REINSTALL_VOMS_CLIENTS}" ]; then
+  yum -y reinstall voms-clients3 
+fi
 
 ## Setup vomses file for the two test VOs
 sync
@@ -133,7 +130,7 @@ fi
 cat << EOF > /home/voms/run-testsuite.sh
 #!/bin/bash
 set -ex
-git clone ${TESTSUITE}
+git clone ${TESTSUITE} voms-testsuite
 pushd ./voms-testsuite
 ROBOT_OPTIONS="${ROBOT_OPTIONS}" pybot tests/clients
 EOF

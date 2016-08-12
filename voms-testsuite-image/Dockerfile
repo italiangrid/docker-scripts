@@ -4,7 +4,7 @@ add manifest.pp /
 
 run git clone git://github.com/cnaf/ci-puppet-modules.git /ci-puppet-modules && \
   puppet apply --modulepath=/ci-puppet-modules/modules:/etc/puppet/modules/ /manifest.pp && \
-  yum install -y fetch-crl java-1.6.0-openjdk-devel && \
+  yum install -y fetch-crl java-1.6.0-openjdk-devel voms-clients3 myproxy perl-libwww-perl && \
   adduser -d /home/voms voms
 
 user voms
