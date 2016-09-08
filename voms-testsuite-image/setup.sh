@@ -89,8 +89,12 @@ else
   fi
 fi
 
+if [ -n "${UPDATE_VOMS_CLIENTS}" ]; then
+  yum -y update voms-clients3
+fi
+
 if [ -n "${REINSTALL_VOMS_CLIENTS}" ]; then
-  yum -y reinstall voms-clients3 
+  yum -y reinstall voms-clients3
 fi
 
 ## Setup vomses file for the two test VOs
