@@ -1,7 +1,4 @@
-include puppet-test-ca
-include puppet-infn-ca
+include mwdevel_test_ca
+include mwdevel_infn_ca
 
-class {'puppet-java':
-  java_version =>  8
-}
-
+class { 'mwdevel_java_setup': java_version => 8, }

@@ -1,4 +1,4 @@
-include puppet-test-ca
-include puppet-infn-ca
-include puppet-centos-utils::fix-stap-groups
-include puppet-centos-utils::yum-conf
+include mwdevel_test_ca
+include mwdevel_infn_ca
+include mwdevel_centos_utils::fix_stap_groups
+include mwdevel_centos_utils::yum_conf

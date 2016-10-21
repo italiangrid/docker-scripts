@@ -1,3 +1,3 @@
-include puppet-test-vos
-include puppet-infn-ca
-include puppet-test-ca
+include mwdevel_test_vos
+include mwdevel_infn_ca
+include mwdevel_test_ca
