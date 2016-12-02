@@ -21,9 +21,9 @@ set -ex
 # use the STORM_REPO env variable for the repo, or default to the develop repo
 STORM_REPO=${STORM_REPO:-http://radiohead.cnaf.infn.it:9999/view/REPOS/job/repo_storm_develop_SL6/lastSuccessfulBuild/artifact/storm_develop_sl6.repo}
 
-# install emi-release
-wget $WGET_OPTIONS  http://emisoft.web.cern.ch/emisoft/dist/EMI/3/sl6/x86_64/base/emi-release-3.0.0-2.el6.noarch.rpm
-yum localinstall --nogpgcheck -y emi-release-3.0.0-2.el6.noarch.rpm
+# install UMD repositories
+rpm --import http://repository.egi.eu/sw/production/umd/UMD-RPM-PGP-KEY
+yum install -y http://repository.egi.eu/sw/production/umd/3/sl6/x86_64/updates/umd-release-3.14.3-1.el6.noarch.rpm
 
 # add some users
 adduser -r storm
