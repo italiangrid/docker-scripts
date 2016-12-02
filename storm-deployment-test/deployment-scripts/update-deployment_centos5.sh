@@ -23,7 +23,8 @@ STORM_REPO=${STORM_REPO:-http://radiohead.cnaf.infn.it:9999/view/REPOS/job/repo_
 
 # install UMD repositories
 rpm --import http://repository.egi.eu/sw/production/umd/UMD-RPM-PGP-KEY
-yum install -y http://repository.egi.eu/sw/production/umd/3/sl5/x86_64/updates/umd-release-3.0.1-1.el5.noarch.rpm
+wget $WGET_OPTIONS http://repository.egi.eu/sw/production/umd/3/sl5/x86_64/updates/umd-release-3.0.1-1.el5.noarch.rpm
+yum localinstall -y umd-release-3.0.1-1.el5.noarch.rpm
 
 # add some users
 adduser -r storm
