@@ -8,8 +8,8 @@ yum -y install make createrepo wget rpm-build git tar maven java-1.8.0-openjdk-d
 
 # Setup JAVA 8 as default for maven
 echo 'JAVA_HOME=$JVM_ROOT/java-1.8.0' >> /etc/java/java.conf
-echo 2 | alternatives --config java
-echo 2 | alternatives --config javac
+echo 1 | alternatives --config java
+echo 1 | alternatives --config javac
 echo
 
 java -version
