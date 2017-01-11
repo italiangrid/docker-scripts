@@ -1,4 +1,4 @@
-include puppet-emi3-release
-include puppet-test-ca
-include puppet-infn-ca
-include puppet-test-vos
+include mwdevel_emi3_release
+include mwdevel_test_ca
+include mwdevel_infn_ca
+include mwdevel_test_vos

@@ -1,3 +1,3 @@
-include puppet-storm
-include puppet-infn-ca
-include puppet-robot-framework
+include mwdevel_storm
+include mwdevel_infn_ca
+include mwdevel_robot_framework

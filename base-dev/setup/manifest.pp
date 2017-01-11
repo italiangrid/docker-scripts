@@ -1,8 +1,6 @@
-include puppet-maven-repo
-include puppet-emi3-release
-include puppet-test-ca
-include puppet-infn-ca
+include mwdevel_maven_repo
+include mwdevel_emi3_release
+include mwdevel_test_ca
+include mwdevel_infn_ca
 
-class {'puppet-java':
-  java_version => 8
-}
+class { 'mwdevel_java_setup': java_version => 8, }
