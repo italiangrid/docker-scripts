@@ -1,0 +1,100 @@
+version: '2'
+services:
+  pap:
+    container_name: argus-pap.cnaf.test
+    hostname: argus-pap
+    domainname: cnaf.test
+    build: ./pap/
+    image: argus-pap-el7
+    ports:
+      - "8150:8150"
+      - "8151:8150"
+      - "9012:9012"
+      - "4002:4002"
+    volumes:
+      - /dev/urandom:/dev/random
+      - ~/workspace/argus-pap:/opt/code/argus-pap:ro
+      - ~/.jrebel:/root/.jrebel:rw
+      - ~/jrebel:/opt/jrebel:ro
+      - ~/workspace/conf/__cnaf_test.cert.pem:/etc/grid-security/hostcert.pem:ro
+      - ~/workspace/conf/__cnaf_test.key.pem:/etc/grid-security/hostkey.pem:ro
+    environment:
+      ENABLE_JREBEL: y
+      ENABLE_JMX: y
+      JMX_PORT: 9012
+      ENABLE_DEBUG: y
+      DEBUG_PORT: 4002
+
+
+  pdp:
+    container_name: argus-pdp.cnaf.test
+    hostname: argus-pdp
+    domainname: cnaf.test
+    build: ./pdp/
+    image: argus-pdp-el7
+    ports:
+      - "8152:8152"
+      - "8153:8153"
+      - "9011:9011"
+      - "4001:4001"
+    depends_on:
+      - pap
+    volumes:
+      - /dev/urandom:/dev/random
+      - ~/workspace/argus-pdp:/opt/code/argus-pdp:ro
+      - ~/.jrebel:/root/.jrebel:rw
+      - ~/jrebel:/opt/jrebel:ro
+      - ~/workspace/conf/__cnaf_test.cert.pem:/etc/grid-security/hostcert.pem:ro
+      - ~/workspace/conf/__cnaf_test.key.pem:/etc/grid-security/hostkey.pem:ro
+    environment:
+      ENABLE_JREBEL: y
+      ENABLE_JMX: y
+      JMX_PORT: 9011
+      ENABLE_DEBUG: y
+      DEBUG_PORT: 4001
+      PAP_HOST: argus-pap.cnaf.test
+      PAP_PORT: 8150
+
+
+  pep:
+    container_name: argus-pep.cnaf.test
+    hostname: argus-pep
+    domainname: cnaf.test
+    build: ./pep/
+    image: argus-pep-el7
+    ports:
+      - "8154:8154"
+      - "8155:8155"
+      - "9010:9010"
+      - "4000:4000"
+    depends_on:
+      - pdp
+    volumes:
+      - /dev/urandom:/dev/random
+      - ~/workspace/argus-pep-server:/opt/code/argus-pep-server:ro
+      - ~/.jrebel:/root/.jrebel:rw
+      - ~/jrebel:/opt/jrebel:ro
+      - ~/workspace/conf/__cnaf_test.cert.pem:/etc/grid-security/hostcert.pem:ro
+      - ~/workspace/conf/__cnaf_test.key.pem:/etc/grid-security/hostkey.pem:ro
+    environment:
+      ENABLE_JREBEL: y
+      ENABLE_JMX: y
+      JMX_PORT: 9010
+      ENABLE_DEBUG: y
+      DEBUG_PORT: 4000
+      PDP_HOST: argus-pdp.cnaf.test
+      PDP_PORT: 8152
+
+
+  bdii:
+    container_name: argus-bdii.cnaf.test
+    hostname: argus-bdii
+    domainname: cnaf.test
+    build: ./bdii/
+    image: argus-bdii-el7
+    ports:
+      - "2170:2170"
+    depends_on:
+      - pap
+      - pdp
+      - pep
