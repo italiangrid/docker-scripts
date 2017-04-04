@@ -57,6 +57,6 @@ java $JMX_OPT $DEBUG_OPT $JREBEL_OPT $PAP_JAVA_OPTS -DPAP_HOME=$PAP_HOME \
 	org.glite.authz.pap.server.standalone.PAPServer \
 	--conf-dir $PAP_HOME/conf &
 
-sleep 5
+sleep ${SLEEP_TIME:-20}
 
 tail -f /var/log/argus/pap/*.log

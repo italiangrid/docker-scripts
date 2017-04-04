@@ -15,4 +15,7 @@ RUN chmod +x /run.sh
 
 COPY manifest.pp /
 
+COPY vo-ca-ap-file /etc/grid-security
+COPY policy-*.info /etc/grid-security/certificates/
+
 CMD /run.sh

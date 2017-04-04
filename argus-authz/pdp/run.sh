@@ -85,6 +85,6 @@ java -Dorg.glite.authz.pdp.home=$PDP_HOME \
 	$PDP_JOPTS $PDP_START_JOPTS $JMX_OPT $DEBUG_OPT $JREBEL_OPT \
 	org.glite.authz.pdp.server.PDPDaemon $PDP_HOME/conf/pdp.ini &
 
-sleep 5
+sleep ${SLEEP_TIME:-20}
 
 tail -f /var/log/argus/pdp/*.log

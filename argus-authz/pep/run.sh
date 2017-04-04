@@ -77,14 +77,10 @@ while true; do
 done
 set -e
 
-java -Dorg.glite.authz.pep.home=$PEP_HOME \
-	-Dorg.glite.authz.pep.confdir=$PEP_HOME/conf \
-	-Dorg.glite.authz.pep.logdir=$PEP_HOME/logs \
-	-Djava.endorsed.dirs=$PEP_HOME/lib/endorsed \
-	-classpath $CLASSPATH \
-	$PEPD_JOPTS $PEPD_START_JOPTS $JMX_OPT $DEBUG_OPT $JREBEL_OPT \
-	org.glite.authz.pep.server.PEPDaemon $PEP_HOME/conf/pepd.ini &
+echo "java -Dorg.glite.authz.pep.home=$PEP_HOME -Dorg.glite.authz.pep.confdir=$PEP_HOME/conf -Dorg.glite.authz.pep.logdir=$PEP_HOME/logs -Djava.endorsed.dirs=$PEP_HOME/lib/endorsed -classpath $CLASSPATH $PEPD_JOPTS $PEPD_START_JOPTS $JMX_OPT $DEBUG_OPT $JREBEL_OPT org.glite.authz.pep.server.PEPDaemon $PEP_HOME/conf/pepd.ini &" > /root/start-argus-pepd.sh
 
-sleep 5
+sh /root/start-argus-pepd.sh
+
+sleep ${SLEEP_TIME:-20}
 
 tail -f /var/log/argus/pepd/*.log
