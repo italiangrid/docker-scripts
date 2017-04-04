@@ -1,5 +1,6 @@
 include mwdevel_infn_ca
 include mwdevel_test_ca
+include mwdevel_argus::clients
 
 class { 'mwdevel_argus::pepd::configure':
   pdp_host                              => 'argus-pdp.cnaf.test',

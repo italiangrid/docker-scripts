@@ -1,2 +1,2 @@
 alias = policy-test-iota
-subjectdn = "/C=IT/O=IGI/CN=IGI Test CA 2"
+subjectdn = "/C=IT/O=IGI/CN=Test CA 2"

@@ -1,3 +1,3 @@
 alias = policy-test-classic
 subjectdn = "/C=IT/O=INFN/CN=INFN Certification Authority", \
-  "/C=IT/O=IGI/CN=IGI Test CA"
+ "/C=IT/O=IGI/CN=Test CA"
