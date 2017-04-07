@@ -1,5 +1,7 @@
 FROM    centos:centos6
 
+MAINTAINER andrea.ceccanti@gmail.com
+
 RUN \
   rpm --import http://mirror.centos.org/centos/6/os/x86_64/RPM-GPG-KEY-CentOS-6 && \
   rpm --import http://mirror.centos.org/centos/6/os/x86_64/RPM-GPG-KEY-CentOS-Debug-6 && \
