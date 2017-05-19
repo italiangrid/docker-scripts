@@ -1,0 +1,2 @@
+alias = policy-test-iota
+subjectdn = "/C=IT/O=IGI/CN=Test CA 2"
