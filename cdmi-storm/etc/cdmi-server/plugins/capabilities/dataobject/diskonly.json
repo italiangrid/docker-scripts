@@ -1,0 +1,24 @@
+{
+    "name": "DiskOnly",
+    "capabilities": {
+        "cdmi_capabilities_templates": true,
+        "cdmi_capabilities_exact_inherit": true,
+        "cdmi_data_storage_lifetime": true,
+        "cdmi_data_redundancy": true,
+        "cdmi_geographic_placement": true,
+        "cdmi_latency": true,
+        "cdmi_throughput": true,
+        "cdmi_durability": true,
+        "cdmi_export_container_http": true
+    },
+    "metadata": {
+        "cdmi_data_redundancy": "1",
+        "cdmi_geographic_placement": [
+            "IT"
+        ],
+        "cdmi_latency": "0",
+        "cdmi_throughput": "4194304",
+        "cdmi_data_storage_lifetime": "P1Y",
+        "cdmi_durability": "99.999"
+    }
+}
