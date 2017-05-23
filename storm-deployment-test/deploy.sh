@@ -4,6 +4,7 @@ set -x
 MODE="${MODE:-clean}"
 PLATFORM="${PLATFORM:-centos6}"
 STORM_REPO=${STORM_REPO:-http://radiohead.cnaf.infn.it:9999/view/REPOS/job/repo_storm_develop_SL6/lastSuccessfulBuild/artifact/storm_develop_sl6.repo}
+STORM_DEPLOYMENT_TEST_BRANCH=${STORM_DEPLOYMENT_TEST_BRANCH:-master}
 
 DEPLOYMENT_SCRIPT="$MODE-deployment_$PLATFORM.sh"
 
@@ -18,7 +19,7 @@ service rsyslog start
 
 cd /deployment-scripts
 
-git clone https://github.com/italiangrid/storm-deployment-test.git
+git clone https://github.com/italiangrid/storm-deployment-test.git --branch $STORM_DEPLOYMENT_TEST_BRANCH
 cp storm-deployment-test/post-config-setup.sh .
 cp storm-deployment-test/install-yaim-configuration.sh .
 cp -a storm-deployment-test/siteinfo ./
