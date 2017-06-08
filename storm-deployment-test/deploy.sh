@@ -17,12 +17,9 @@ chmod 644 /etc/grid-security/hostcert.pem
 # setup StoRM services
 service rsyslog start
 
-cd /deployment-scripts
-
+cd /
 git clone https://github.com/italiangrid/storm-deployment-test.git --branch $STORM_DEPLOYMENT_TEST_BRANCH
-cp storm-deployment-test/post-config-setup.sh .
-cp storm-deployment-test/install-yaim-configuration.sh .
-cp -a storm-deployment-test/siteinfo ./
+cd /storm-deployment-test/docker
 
 chmod +x $DEPLOYMENT_SCRIPT
 STORM_REPO=$STORM_REPO ./$DEPLOYMENT_SCRIPT
