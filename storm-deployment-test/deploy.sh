@@ -3,10 +3,7 @@ set -x
 
 MODE="${MODE:-clean}"
 PLATFORM="${PLATFORM:-centos6}"
-STORM_REPO=${STORM_REPO:-http://italiangrid.github.io/storm/repo/storm_sl6.repo}
 STORM_DEPLOYMENT_TEST_BRANCH=${STORM_DEPLOYMENT_TEST_BRANCH:-master}
-
-DEPLOYMENT_SCRIPT="$MODE-deployment_$PLATFORM.sh"
 
 # install host certificate
 cp /storm-certificates/docker_storm_cnaf_infn_it.cert.pem /etc/grid-security/hostcert.pem
@@ -21,8 +18,10 @@ cd /
 git clone https://github.com/italiangrid/storm-deployment-test.git --branch $STORM_DEPLOYMENT_TEST_BRANCH
 cd /storm-deployment-test/docker
 
+DEPLOYMENT_SCRIPT="$MODE-deployment_$PLATFORM.sh"
+
 chmod +x $DEPLOYMENT_SCRIPT
-STORM_REPO=$STORM_REPO ./$DEPLOYMENT_SCRIPT
+./$DEPLOYMENT_SCRIPT
 
 # disable frontend monitor
 sed -i -e '/monitoring.enabled=true/c\monitoring.enabled=false' /etc/storm/frontend-server/storm-frontend-server.conf
