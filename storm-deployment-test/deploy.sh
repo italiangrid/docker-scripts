@@ -3,7 +3,7 @@ set -x
 
 MODE="${MODE:-clean}"
 PLATFORM="${PLATFORM:-centos6}"
-STORM_REPO=${STORM_REPO:-http://radiohead.cnaf.infn.it:9999/view/REPOS/job/repo_storm_develop_SL6/lastSuccessfulBuild/artifact/storm_develop_sl6.repo}
+STORM_REPO=${STORM_REPO:-http://italiangrid.github.io/storm/repo/storm_sl6.repo}
 STORM_DEPLOYMENT_TEST_BRANCH=${STORM_DEPLOYMENT_TEST_BRANCH:-master}
 
 DEPLOYMENT_SCRIPT="$MODE-deployment_$PLATFORM.sh"
