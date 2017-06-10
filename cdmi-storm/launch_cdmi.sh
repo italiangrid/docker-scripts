@@ -1,6 +1,8 @@
 #!/bin/bash
 set -x
 
+STORM_REPO="${STORM_REPO:-https://ci.cloud.cnaf.infn.it/job/pkg.storm/job/release%252Fv1.11.12/lastSuccessfulBuild/artifact/repo/storm-test-centos6.repo}"
+
 STORM_BACKEND_HOST="${STORM_BACKEND_HOST:-docker-storm.cnaf.infn.it}"
 STORM_XMLRPC_TOKEN="${STORM_XMLRPC_TOKEN:-NS4kYAZuR65XJCq}"
 REDIS_HOSTNAME="${REDIS_HOSTNAME:-localhost}"
@@ -8,6 +10,11 @@ REDIS_HOSTNAME="${REDIS_HOSTNAME:-localhost}"
 if [ -z ${CLIENT_ID+x} ]; then echo "CLIENT_ID is unset"; exit 1; fi
 
 if [ -z ${CLIENT_SECRET+x} ]; then echo "CLIENT_SECRET is unset"; exit 1; fi
+
+# install cdmi_storm
+wget $STORM_REPO -O /etc/yum.repos.d/cdmi-storm.repo
+yum clean all
+yum install -y cdmi-storm
 
 cd /etc/cdmi-server/plugins
 sed -i 's/STORM_BACKEND_HOST/${STORM_BACKEND_HOST}/g' storm-properties.yml
