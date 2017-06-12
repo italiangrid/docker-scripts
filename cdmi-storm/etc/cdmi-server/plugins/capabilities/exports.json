@@ -1,6 +1,0 @@
-{
-    "Network/WebHTTP": {
-        "identifier": "http://localhost/cdmi/browse",
-        "permissions": "oidc"
-    }
-}

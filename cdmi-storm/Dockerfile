@@ -11,18 +11,12 @@ RUN yum install -y cdmi-server
 COPY launch_cdmi.sh /launch_cdmi.sh
 RUN chmod +x /launch_cdmi.sh
 
-COPY ./etc/cdmi-server/plugins/* /etc/cdmi-server/plugins/
-WORKDIR /var/lib/cdmi-server/config
-RUN mv application.yml application.yml.original
-COPY ./var/lib/cdmi-server/config/application.yml .
-
 RUN yum install -y nc
 
 EXPOSE 8888
 
 USER cdmi
 
-#WORKDIR /var/lib/cdmi-server
 ENV JAVA_OPTS "-Dloader.path=/usr/lib/cdmi-server/plugins/"
 
 CMD /launch_cdmi.sh
