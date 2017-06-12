@@ -15,8 +15,6 @@ RUN yum install -y nc
 
 EXPOSE 8888
 
-USER cdmi
-
 ENV JAVA_OPTS "-Dloader.path=/usr/lib/cdmi-server/plugins/"
 
 CMD /launch_cdmi.sh
