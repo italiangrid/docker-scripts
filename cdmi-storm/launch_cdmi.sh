@@ -1,29 +1,27 @@
 #!/bin/bash
 set -x
 
-STORM_REPO="${STORM_REPO:-https://ci.cloud.cnaf.infn.it/job/pkg.storm/job/release%252Fv1.11.12/lastSuccessfulBuild/artifact/repo/storm-test-centos6.repo}"
-
-STORM_BACKEND_HOST="${STORM_BACKEND_HOST:-docker-storm.cnaf.infn.it}"
-STORM_XMLRPC_TOKEN="${STORM_XMLRPC_TOKEN:-NS4kYAZuR65XJCq}"
-REDIS_HOSTNAME="${REDIS_HOSTNAME:-localhost}"
-
-if [ -z ${CLIENT_ID+x} ]; then echo "CLIENT_ID is unset"; exit 1; fi
-
-if [ -z ${CLIENT_SECRET+x} ]; then echo "CLIENT_SECRET is unset"; exit 1; fi
-
 # install cdmi_storm
 wget $STORM_REPO -O /etc/yum.repos.d/cdmi-storm.repo
 yum clean all
 yum install -y cdmi-storm
 
-cd /etc/cdmi-server/plugins
-sed -i 's/STORM_BACKEND_HOST/${STORM_BACKEND_HOST}/g' storm-properties.yml
-sed -i 's/STORM_XMLRPC_TOKEN/${STORM_XMLRPC_TOKEN}/g' storm-properties.yml
+# Configure
+if [ -z ${CLIENT_ID+x} ]; then echo "CLIENT_ID is unset"; exit 1; fi
+if [ -z ${CLIENT_SECRET+x} ]; then echo "CLIENT_SECRET is unset"; exit 1; fi
+
+STORM_DEPLOYMENT_TEST_BRANCH="${STORM_DEPLOYMENT_TEST_BRANCH:-master}"
+
+cd /
+git clone https://github.com/italiangrid/storm-deployment-test.git --branch $STORM_DEPLOYMENT_TEST_BRANCH
+cd /storm-deployment-test
+
+cp -rf cdmi/var/lib/cdmi-server/config/application.yml /var/lib/cdmi-server/config/application.yml
+cp -rf cdmi/etc/cdmi-server/plugins/capabilities /etc/cdmi-server/plugins/
 
 cd /var/lib/cdmi-server/config
 sed -i 's/CLIENT_ID/${CLIENT_ID}/g' application.yml
 sed -i 's/CLIENT_SECRET/${CLIENT_SECRET}/g' application.yml
-sed -i 's/REDIS_HOSTNAME/${REDIS_HOSTNAME}/g' application.yml
 
 MAX_RETRIES=600
 attempts=1
