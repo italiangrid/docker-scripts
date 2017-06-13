@@ -1,5 +1,11 @@
 FROM centos:7
 
+ARG CLIENT_ID
+ARG CLIENT_SECRET
+
+ENV CLIENT_ID=$CLIENT_ID
+ENV CLIENT_SECRET=$CLIENT_SECRET
+
 RUN yum update -y
 RUN yum install -y wget git
 
@@ -18,4 +24,4 @@ RUN yum install -y nc
 
 EXPOSE 8888
 
-CMD /launch_cdmi.sh
+ENTRYPOINT ["/launch_cdmi.sh"]
