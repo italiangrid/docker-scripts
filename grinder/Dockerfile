@@ -1,5 +1,7 @@
 FROM  italiangrid/storm-testsuite
 
+USER root
+
 ADD setup /
 
 RUN chmod +x "/setup.sh"
