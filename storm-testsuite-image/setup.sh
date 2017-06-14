@@ -39,5 +39,6 @@ adduser -d /home/tester tester
 mkdir /home/tester/.globus
 chown -R tester.tester /home/tester/.globus
 
-chmod +x /setup_testsuite.sh
+chmod +x /run_testsuite.sh
 
+echo 'export X509_USER_PROXY="/tmp/x509up_u$(id -u)"'>/etc/profile.d/x509_user_proxy.sh
