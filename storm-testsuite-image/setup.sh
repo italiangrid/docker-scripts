@@ -15,9 +15,6 @@ if [[ ( $? -eq 4 ) || ( $? -eq 6 ) ]]; then
   exit 1
 fi
 
-# Added missing package to avoid fetch-crl packaging bug
-yum install -y perl-libwww-perl.noarch
-
 # install utilities
 yum install -y fetch-crl nc
 
@@ -33,12 +30,5 @@ pip install --upgrade robotframework-httplibrary
 
 # install clients
 yum install -y voms-clients3 myproxy
-
-# setup for the tester user
-adduser -d /home/tester tester
-mkdir /home/tester/.globus
-chown -R tester.tester /home/tester/.globus
-
-chmod +x /run_testsuite.sh
 
 echo 'export X509_USER_PROXY="/tmp/x509up_u$(id -u)"'>/etc/profile.d/x509_user_proxy.sh
