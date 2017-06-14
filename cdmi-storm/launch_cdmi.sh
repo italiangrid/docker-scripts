@@ -6,8 +6,8 @@ PLATFORM="${PLATFORM:-centos6}"
 STORM_DEPLOYMENT_TEST_BRANCH=${STORM_DEPLOYMENT_TEST_BRANCH:-master}
 REDIS_HOSTNAME="${REDIS_HOSTNAME:-localhost}"
 
-if [ -z ${CLIENT_ID+x} ]; then echo "CLIENT_ID is unset"; exit 1; fi
-if [ -z ${CLIENT_SECRET+x} ]; then echo "CLIENT_SECRET is unset"; exit 1; fi
+if [ -z ${CDMI_CLIENT_ID+x} ]; then echo "CDMI_CLIENT_ID is unset"; exit 1; fi
+if [ -z ${CDMI_CLIENT_SECRET+x} ]; then echo "CDMI_CLIENT_SECRET is unset"; exit 1; fi
 
 # Wait for redis server
 MAX_RETRIES=600

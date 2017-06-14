@@ -1,11 +1,5 @@
 FROM centos:7
 
-ARG CLIENT_ID
-ARG CLIENT_SECRET
-
-ENV CLIENT_ID=$CLIENT_ID
-ENV CLIENT_SECRET=$CLIENT_SECRET
-
 RUN yum update -y
 RUN yum install -y wget git
 
