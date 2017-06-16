@@ -77,5 +77,13 @@ rm mycron
 #write out current crontab
 crontab -l > mycron
 
+logging_level=$(get_prop "logging.level")
+sed -i "s/name=\"org.apache\" level=\"WARN\"/name=\"org.apache\" level=\"${logging_level}\"/g" ./lib/logback.xml
+sed -i "s/name=\"httpclient\" level=\"ERROR\"/name=\"httpclient\" level=\"${logging_level}\"/g" ./lib/logback.xml
+sed -i "s/name=\"org.italiangrid.axis\" level=\"WARN\"/name=\"org.italiangrid.axis\" level=\"${logging_level}\"/g" ./lib/logback.xml
+
+sed -i "s/level=\"INFO\"/level=\"${logging_level}\"/g" ./lib/logback-worker.xml
+sed -i "s/level=\"WARN\"/level=\"${logging_level}\"/g" ./lib/logback-worker.xml
+
 echo "Run load testsuite ..."
 ./bin/runAgent.sh testsuite.properties

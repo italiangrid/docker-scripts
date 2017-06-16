@@ -12,6 +12,8 @@ common.storm_fe_endpoint_list=${COMMON_STORM_FE_ENDPOINT_LIST}
 common.storm_dav_endpoint_list=${COMMON_STORM_DAV_ENDPOINT_LIST}
 common.test_storagearea=${COMMON_TEST_STORAGEAREA}
 
+logging.level=${LOGGING_LEVEL}
+
 # PtG-Sync
 ptg_sync.test_directory = PtG
 ptg_sync.sleep_threshold = 50
