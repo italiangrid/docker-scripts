@@ -34,5 +34,8 @@ cd /storm-deployment-test/docker
 
 DEPLOYMENT_SCRIPT="$MODE-cdmi-deployment_$PLATFORM.sh"
 
+export CDMI_CLIENT_ID
+export CDMI_CLIENT_SECRET
+
 chmod +x $DEPLOYMENT_SCRIPT
 ./$DEPLOYMENT_SCRIPT
