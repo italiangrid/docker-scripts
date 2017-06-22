@@ -1,6 +1,6 @@
 #!/bin/bash
 set -ex
-tags=${tags:-"centos5 centos6"}
+tags=${tags:-"centos6"}
 
 for t in ${tags}; do
     docker build --pull=true \

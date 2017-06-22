@@ -12,5 +12,4 @@ RUN \
   yum -y update && \
   yum --enablerepo=centosplus install -y epel-release redhat-lsb wget git tar puppet && \
   puppet module install --force maestrodev-wget && \
-  puppet module install --force gini-archive && \
   puppet module install --force puppetlabs-stdlib
