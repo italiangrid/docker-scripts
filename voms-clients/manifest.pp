@@ -1,4 +1,4 @@
-include mwdevel_emi3_release
+include mwdevel_umd_repo
 include mwdevel_test_ca
 include mwdevel_infn_ca
 include mwdevel_test_vos
