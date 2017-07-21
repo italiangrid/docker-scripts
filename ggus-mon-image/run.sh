@@ -20,4 +20,4 @@ cp -r /usr/src/app/assets/* ${REPORT_DIR}
 
 cnaf.py --target_dir=${REPORT_DIR} 
 
-ls /reports
+ls ${REPORT_DIR} 
