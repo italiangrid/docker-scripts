@@ -11,7 +11,7 @@ chmod 400 /etc/grid-security/hostkey.pem
 
 ## Run puppet
 git clone git://github.com/cnaf/ci-puppet-modules.git /ci-puppet-modules
-puppet module install puppetlabs-java
+puppet module install puppetlabs-java --version=1.6.0
 puppet apply --modulepath=/ci-puppet-modules/modules:/etc/puppet/modules/ /manifest.pp
 
 ## Install minimal utils
