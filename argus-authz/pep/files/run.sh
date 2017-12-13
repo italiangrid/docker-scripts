@@ -5,21 +5,30 @@ set -xe
 CODE_DIR=${CODE_DIR:-/opt/code}
 
 PEP_HOME=/usr/share/argus/pepd
-PEP_LIBS=$PEP_HOME/lib
+PEP_LIBS=${PEP_HOME}/lib
+
+function run_puppet {
+	/opt/puppetlabs/bin/puppet apply --modulepath=/opt/ci-puppet-modules/modules:/etc/puppetlabs/code/environments/production/modules /manifest.pp && \
+	grep -q 'failure: 0' /opt/puppetlabs/puppet/cache/state/last_run_summary.yaml
+}
 
 # Get Puppet modules
-cd /opt
-rm -rfv ci-puppet-modules/ argus-mw-devel/
+if [ ! -d /opt/ci-puppet-modules ]; then
+  git clone https://github.com/cnaf/ci-puppet-modules.git /opt/ci-puppet-modules
+fi
 
-git clone https://github.com/cnaf/ci-puppet-modules.git
-git clone https://github.com/argus-authz/argus-mw-devel
+if [ ! -d /opt/argus-mw-devel ]; then
+  git clone https://github.com/argus-authz/argus-mw-devel /opt/argus-mw-devel
+  cd /opt/argus-mw-devel/mwdevel_argus
+  /opt/puppetlabs/bin/puppet module build
+  cd /
+fi
 
 # Configure
-puppet apply --modulepath=/opt/ci-puppet-modules/modules:/opt/argus-mw-devel:/etc/puppet/modules /manifest.pp
+/opt/puppetlabs/bin/puppet module install /opt/argus-mw-devel/mwdevel_argus/pkg/mwdevel-mwdevel_argus-*.tar.gz
+run_puppet
 
-cd /
-
-TARFILE=$CODE_DIR/argus-pep-server/target/argus-pep*.tar.gz
+TARFILE=${CODE_DIR}/argus-pep-server/target/argus-pep*.tar.gz
 
 ## Clean and install new code
 if [ -f $TARFILE ]; then
@@ -28,7 +37,7 @@ if [ -f $TARFILE ]; then
 	tar -C / -xvzf $CODE_DIR/argus-pep-server/target/argus-pep*.tar.gz
 
 	# reconfigure
-	puppet apply --modulepath=/opt/ci-puppet-modules/modules:/opt/argus-mw-devel:/etc/puppet/modules /manifest.pp
+	run_puppet
 fi
 
 # Run
@@ -39,14 +48,16 @@ CLASSPATH=$LOCALCP:`ls $PEP_LIBS/*.jar | xargs | tr ' ' ':'`
 
 JMX_OPT=""
 DEBUG_OPT=""
+DEBUG_SUSPEND=${DEBUG_SUSPEND:-"n"}
 JREBEL_OPT=""
+SSL_DEBUG_OPT=${SSL_DEBUG_OPT:-""}
 
 if [ ! -z "$ENABLE_JMX" ] && [ "$ENABLE_JMX" == 'y' ] && [ ! -z "$JMX_PORT" ]; then
 	JMX_OPT="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=$JMX_PORT -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
 fi
 
 if [ ! -z "$ENABLE_DEBUG" ] && [ "$ENABLE_DEBUG" == 'y' ] && [ ! -z "$DEBUG_PORT" ]; then
-	DEBUG_OPT="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=$DEBUG_PORT,suspend=n"
+	DEBUG_OPT="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=${DEBUG_PORT},suspend=${DEBUG_SUSPEND}"
 fi
 
 if [ ! -z "$ENABLE_JREBEL" ] && [ "$ENABLE_JREBEL" == 'y' ]; then
@@ -77,10 +88,22 @@ while true; do
 done
 set -e
 
-echo "java -Dorg.glite.authz.pep.home=$PEP_HOME -Dorg.glite.authz.pep.confdir=$PEP_HOME/conf -Dorg.glite.authz.pep.logdir=$PEP_HOME/logs -Djava.endorsed.dirs=$PEP_HOME/lib/endorsed -classpath $CLASSPATH $PEPD_JOPTS $PEPD_START_JOPTS $JMX_OPT $DEBUG_OPT $JREBEL_OPT org.glite.authz.pep.server.PEPDaemon $PEP_HOME/conf/pepd.ini &" > /root/start-argus-pepd.sh
+rm -rfv /var/log/argus/pepd/*
+
+ln -s /dev/stdout /var/log/argus/pepd/access.log
+ln -s /dev/stdout /var/log/argus/pepd/audit.log
+ln -s /dev/stdout /var/log/argus/pepd/process.log
+
+cat <<EOF > /root/start-argus-pepd.sh
+java -Dorg.glite.authz.pep.home=${PEP_HOME} \
+-Dorg.glite.authz.pep.confdir=${PEP_HOME}/conf \
+-Dorg.glite.authz.pep.logdir=${PEP_HOME}/logs \
+-Djava.endorsed.dirs=${PEP_HOME}/lib/endorsed \
+-classpath ${CLASSPATH} \
+${PEPD_JOPTS} ${PEPD_START_JOPTS} ${JMX_OPT} ${DEBUG_OPT} ${JREBEL_OPT} ${SSL_DEBUG_OPT} \
+org.glite.authz.pep.server.PEPDaemon $PEP_HOME/conf/pepd.ini
+
+EOF
 
 sh /root/start-argus-pepd.sh
 
-sleep ${SLEEP_TIME:-20}
-
-tail -f /var/log/argus/pepd/*.log
