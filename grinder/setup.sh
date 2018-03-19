@@ -12,3 +12,9 @@ cat /etc/profile.d/x509_user_proxy.sh
 echo 'export GRINDER_HOME="/opt/grinder-3.11"'>/etc/profile.d/grinder.sh
 cat /etc/profile.d/grinder.sh
 
+mkdir -p /etc/storm/grinder
+chmod -R 777 /etc/storm
+
+# Ptp_Pd test need this
+echo "test file" > /tmp/prova.txt
+chmod 777 /tmp/prova.txt

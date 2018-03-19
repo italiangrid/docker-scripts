@@ -63,3 +63,10 @@ atlas_nested.sleep_time=.5
 
 # Mix-DAV
 mixdav.test_directory = mix-webdav
+
+# ptp_pd
+ptp_pd.test_directory = ptp_pd
+ptp_pd.sleep_threshold = 50
+ptp_pd.sleep_time = .5
+ptp_pd.pinLifetime_sec = 3
+ptp_pd.numfiles = 10
