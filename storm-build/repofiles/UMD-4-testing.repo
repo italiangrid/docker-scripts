@@ -1,0 +1,9 @@
+[UMD-4-testing]
+name=UMD 4 testing (CentOS 6)
+baseurl=http://repository.egi.eu/sw/testing/umd/4/sl6/$basearch
+protect=1
+enabled=0
+# To use priorities you must have yum-priorities installed
+priority=2
+gpgcheck=1
+gpgkey=http://repository.egi.eu/sw/production/umd/UMD-RPM-PGP-KEY

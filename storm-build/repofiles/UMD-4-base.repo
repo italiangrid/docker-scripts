@@ -1,0 +1,9 @@
+[UMD-4-base]
+name=UMD 4 base (CentOS 6)
+baseurl=http://os-server.cnaf.infn.it/distro/UMD/4/sl6/$basearch/base
+protect=1
+enabled=1
+# To use priorities you must have yum-priorities installed
+priority=2
+gpgcheck=1
+gpgkey=http://repository.egi.eu/sw/production/umd/UMD-RPM-PGP-KEY

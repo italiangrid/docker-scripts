@@ -1,9 +1,7 @@
 FROM italiangrid/base:centos6
 
 RUN rpm --import http://repository.egi.eu/sw/production/umd/UMD-RPM-PGP-KEY
-RUN yum install -y http://repository.egi.eu/sw/production/umd/4/sl6/x86_64/updates/umd-release-4.1.3-1.el6.noarch.rpm
-
-RUN sed -i "s/priority=1/priority=2/" /etc/yum.repos.d/UMD-*-base.repo /etc/yum.repos.d/UMD-*-updates.repo
+ADD ./repofiles/* /etc/yum.repos.d/
 
 RUN yum clean all
 
@@ -27,4 +25,9 @@ RUN yum install -y \
   gcc-c++ \
   storm-xmlrpc-c-devel \
   argus-pep-api-c \
-  argus-pep-api-c-devel
+  argus-pep-api-c-devel \
+  zlib \
+  libattr-devel \
+  globus-gridftp-server-devel \
+  globus-ftp-control-devel \
+  globus-ftp-client-devel
