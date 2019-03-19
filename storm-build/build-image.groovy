@@ -42,6 +42,7 @@ pipeline {
         container('docker-runner'){
           dir("${env.DIRECTORY}"){
             sh "sh push-image.sh"
+            sh "sh push-image-dockerhub.sh"
           }
         }
       }

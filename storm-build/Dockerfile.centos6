@@ -8,23 +8,29 @@ RUN sed -i "s/priority=1/priority=2/" /etc/yum.repos.d/UMD-*-base.repo /etc/yum.
 RUN yum clean all
 
 RUN yum install -y \
-  libtool \
-  pkgconfig \
-  curl-devel \
+  argus-pep-api-c \
+  argus-pep-api-c-devel \
   boost-devel \
-  mysql-devel \
-  globus-gssapi-gsi-devel \
-  globus-gss-assist-devel \
-  globus-common-devel \
-  globus-gridmap-callout-error-devel \
-  globus-gsi-credential-devel \
-  krb5-devel \
-  gsoap-devel \
   CGSI-gSOAP-devel \
-  libuuid-devel \
-  voms \
+  curl-devel \
   gcc \
   gcc-c++ \
+  globus-common-devel \
+  globus-ftp-client-devel \
+  globus-ftp-control-devel \
+  globus-gridftp-server-devel \
+  globus-gridmap-callout-error-devel \
+  globus-gsi-credential-devel \
+  globus-gss-assist-devel \
+  globus-gssapi-gsi-devel \
+  gsoap-devel \
+  krb5-devel \
+  libattr-devel \
+  libtool \
+  libuuid-devel \
+  mysql-devel \
+  openssl-devel \
+  pkgconfig \
   storm-xmlrpc-c-devel \
-  argus-pep-api-c \
-  argus-pep-api-c-devel
+  voms \
+  zlib
