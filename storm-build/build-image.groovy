@@ -2,14 +2,8 @@
 
 pipeline {
 
-  agent {
-      kubernetes {
-          label "${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
-          cloud 'Kube mwdevel'
-          defaultContainer 'jnlp'
-          inheritFrom 'ci-template'
-      }
-  }
+  agent { label 'docker' }
+
   options {
     timeout(time: 1, unit: 'HOURS')
     buildDiscarder(logRotator(numToKeepStr: '5'))
@@ -27,30 +21,24 @@ pipeline {
   stages {
     stage('prepare'){
       steps {
-        container('runner'){
-          deleteDir()
-          git url: "${env.REPOSITORY}", branch: "${env.BRANCH}"
-        }
+        deleteDir()
+        git url: "${env.REPOSITORY}", branch: "${env.BRANCH}"
       }
     }
 
     stage('build'){
       steps {
-        container('runner'){
-          dir("${env.DIRECTORY}"){
-            sh 'sh build-image.sh'
-          }
+        dir("${env.DIRECTORY}"){
+          sh 'sh build-image.sh'
         }
       }
     }
 
     stage('push'){
       steps {
-        container('runner'){
-          dir("${env.DIRECTORY}"){
-            sh "sh push-image.sh"
-            sh "sh push-image-dockerhub.sh"
-          }
+        dir("${env.DIRECTORY}"){
+          sh "sh push-image.sh"
+          sh "sh push-image-dockerhub.sh"
         }
       }
     }
