@@ -37,7 +37,6 @@ pipeline {
     stage('push'){
       steps {
         dir("${env.DIRECTORY}"){
-          sh "sh push-image.sh"
           sh "sh push-image-dockerhub.sh"
         }
       }
