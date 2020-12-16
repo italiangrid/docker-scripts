@@ -1,0 +1,49 @@
+FROM centos:7
+
+# CentOS 7 repos
+RUN rpm --import http://mirror.centos.org/centos/7/os/x86_64/RPM-GPG-KEY-CentOS-7
+RUN rpm --import http://mirror.centos.org/centos/7/os/x86_64/RPM-GPG-KEY-CentOS-Testing-7
+
+# Puppet repo
+RUN rpm -Uvh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
+
+# UMD repo
+RUN rpm --import http://repository.egi.eu/sw/production/umd/UMD-RPM-PGP-KEY
+RUN yum install -y http://repository.egi.eu/sw/production/umd/4/centos7/x86_64/updates/umd-release-4.1.3-1.el7.centos.noarch.rpm
+
+RUN yum clean all && \
+    yum -y update && \
+    yum --enablerepo=centosplus install -y epel-release redhat-lsb wget git tar puppet && \
+    puppet module install --force maestrodev-wget && \
+    puppet module install --force puppetlabs-stdlib
+
+# StoRM stable repo
+RUN wget https://repo.cloud.cnaf.infn.it/repository/storm/storm-stable-centos7.repo -O /etc/yum.repos.d/storm-stable-centos7.repo
+
+RUN yum install -y \
+  argus-pep-api-c \
+  argus-pep-api-c-devel \
+  boost-devel \
+  CGSI-gSOAP-devel \
+  curl-devel \
+  gcc \
+  gcc-c++ \
+  globus-common-devel \
+  globus-ftp-client-devel \
+  globus-ftp-control-devel \
+  globus-gridftp-server-devel \
+  globus-gridmap-callout-error-devel \
+  globus-gsi-credential-devel \
+  globus-gss-assist-devel \
+  globus-gssapi-gsi-devel \
+  gsoap-devel \
+  krb5-devel \
+  libattr-devel \
+  libtool \
+  libuuid-devel \
+  mysql-devel \
+  openssl-devel \
+  pkgconfig \
+  storm-xmlrpc-c-devel \
+  voms \
+  zlib

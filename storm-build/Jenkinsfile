@@ -12,7 +12,6 @@ pipeline {
   triggers { cron('@daily') }
 
   environment {
-    DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
     REPOSITORY = "https://github.com/italiangrid/docker-scripts"
     BRANCH = "master"
     DIRECTORY = "storm-build"
@@ -36,8 +35,12 @@ pipeline {
 
     stage('push'){
       steps {
-        dir("${env.DIRECTORY}"){
-          sh "sh push-image-dockerhub.sh"
+        script {
+          withDockerRegistry([ credentialsId: "dockerhub-enrico", url: "" ]) {
+            dir("${env.DIRECTORY}"){
+              sh "sh push-image-dockerhub.sh"
+            }
+          }
         }
       }
     }
